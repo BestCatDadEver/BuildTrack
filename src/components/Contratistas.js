@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Button } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Button, FlatList } from "react-native";
 import { getContratistas } from "../database/Contratistas";
 
-const Contratistas = () => {
+export const Contratistas = () => {
     const [contratistas, setContratistas] = useState([])
 
     const fetchContratistas = async () => {
@@ -10,22 +10,19 @@ const Contratistas = () => {
         setContratistas(data)
     }
 
-    useEffect(() => {
-        fetchContratistas();
-    }, [])
     
- return (
+    
+  return (
     <View style={styles.contenedor}>
-      <ScrollView>
-      {
-        contratistas.length > 0 ? 
-          contratistas.map(c => (
-             <Text key={c.id}>{c.nombre}</Text>
-          ))
-          :
-          <Text>No hay contratistas</Text>
-      }
-      </ScrollView>
+      <FlatList
+        data={contratistas}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Text>{item.nombre} {item.apellido} 
+          Especialidad: {item.especialidad} Teléfono: {item.telefono}</Text>
+        )}
+        ListEmptyComponent={<Text>No hay contratistas</Text>}
+      />
       <Button onPress={fetchContratistas} title="Obtener contratistas" />
     </View>
   );
@@ -37,5 +34,3 @@ const styles = StyleSheet.create({
     marginTop: 20
   }
 })
-
-export default Contratistas;

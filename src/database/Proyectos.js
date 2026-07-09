@@ -1,6 +1,6 @@
 import { supabase } from "./Index"; 
 
-export const getContratistas = async () => {
+export const getProyectos = async () => {
   let resp;
   try {
       const { data } = await supabase

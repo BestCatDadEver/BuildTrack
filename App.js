@@ -7,7 +7,7 @@ import Navegation from "./src/navigation/Navegation.js"
 
 export default function App() {
   return (
-    // <Contratistas/>
+    
     <Navegation/>
   );
 }
