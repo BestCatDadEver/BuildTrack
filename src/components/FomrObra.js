@@ -3,6 +3,7 @@ import { Modal, Pressable, Text, TextInput, View } from "react-native"
 import { ScrollView } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import { FrenteObra } from "./FrenteObra"
+import styles from "../styles"
 
 export const FomrObra = () => {
   const [nombreObra, SetnombreObra] = useState("")
@@ -19,25 +20,29 @@ export const FomrObra = () => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
+      {/* <View style={styles.header}>
+        <Text style={styles.title}>Agregar Nueva Obra</Text>
+      </View> */}
+
       <View>
-        <Text>Agregar Nueva Obra</Text>
+        <Text style={styles.label}>Nombre de la obra</Text>
+        <TextInput 
+          style={styles.input}
+          placeholder="Ej. Complejo San Eduardo" 
+          placeholderTextColor="#1B365D"
+          value={nombreObra}
+          onChangeText={SetnombreObra}
+        />
       </View>
-      <View>
-        <TextInput placeholder="Nombre de la obra" onChange={SetnombreObra} />
-      </View>
-      <View style={{ flexDirection: "row" }}>
-        <View>
-          <Text>Fecha Inicio</Text>
+
+      <View style={styles.row}>
+        <View style={styles.col}>
+          <Text style={styles.label}>Fecha Inicio</Text>
           <Pressable
             onPress={() => setMostrarSelectorFecha(true)}
-            style={{
-              borderWidth: 1,
-              borderColor: "#ccc",
-              padding: 12,
-              borderRadius: 5,
-            }}>
-            <Text>{fechaInicio.toLocaleDateString()}</Text>
+            style={styles.dateButton}>
+            <Text style={styles.dateButtonText}>{fechaInicio.toLocaleDateString()}</Text>
           </Pressable>
           {mostrarSelectorFecha && (
             <DateTimePicker
@@ -53,17 +58,13 @@ export const FomrObra = () => {
             />
           )}
         </View>
-        <View>
-          <Text>Fecha de Fin</Text>
+
+        <View style={styles.col}>
+          <Text style={styles.label}>Fecha de Fin</Text>
           <Pressable
             onPress={() => setMostrarSelectorFecha(true)}
-            style={{
-              borderWidth: 1,
-              borderColor: "#ccc",
-              padding: 12,
-              borderRadius: 5,
-            }}>
-            <Text>{fechaInicio.toLocaleDateString()}</Text>
+            style={styles.dateButton}>
+            <Text style={styles.dateButtonText}>{fechaFin.toLocaleDateString()}</Text>
           </Pressable>
           {mostrarSelectorFecha && (
             <DateTimePicker
@@ -80,15 +81,15 @@ export const FomrObra = () => {
           )}
         </View>
       </View>
-      <View>
-        <Text>Frentes de Obra</Text>
-        <Pressable onPress={abrirModal}>
-          <Text>Agregar frente de obra</Text>
+
+      <View style={styles.frentesSection}>
+        <Text style={styles.subtitle}>Frentes de Obra</Text>
+        <Pressable style={styles.secondaryButton} onPress={abrirModal}>
+          <Text style={styles.secondaryButtonText}>+ Agregar frente de obra</Text>
         </Pressable>
-        <Modal animationType="slide" visible={estadoModal}>
+        <Modal animationType="slide" visible={estadoModal} style={styles.container}>
           <FrenteObra cerrarModal={cerrarModal}/>
         </Modal>
       </View>
     </ScrollView>
-  )
-}
+  )}
