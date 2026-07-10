@@ -2,12 +2,12 @@ import React from 'react'
 import { SafeAreaView, TextInput, View } from 'react-native'
 import { FormContratista } from '../components/FormContratista'
 import { Contratistas } from '../components/Contratistas'
-
+import styles from '../styles'
 export const AltaContratista = () => {
   return (
-    <SafeAreaView style={{felx:1}}>
+    <SafeAreaView style={styles.container}>
         <FormContratista/>
-        <Contratistas/>
+        {/* <Contratistas/> */}
     </SafeAreaView>
   )
 }
