@@ -5,7 +5,7 @@ import { Contratistas } from '../components/Contratistas'
 
 export const AltaContratista = () => {
   return (
-    <SafeAreaView style={{felx:1}}>
+    <SafeAreaView style={{flex:1}}>
         <FormContratista/>
         <Contratistas/>
     </SafeAreaView>
