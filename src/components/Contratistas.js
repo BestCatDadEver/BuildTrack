@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Button, FlatList } from "react-native";
-import { getContratistas } from "../database/Contratistas";
+import { View, Text, ScrollView, Button, FlatList } from "react-native";
+import { getContratistasDb } from "../database/Contratistas";
+import { useDispatch, useSelector } from 'react-redux';
+import { getContratistas } from "../redux/ContratistaSlice";
 
 export const Contratistas = () => {
-    const [contratistas, setContratistas] = useState([])
+  const dispatch = useDispatch();
+  const contratistas = useSelector(state => state.contratistas.contratistasList);
 
-    const fetchContratistas = async () => {
-        const data = await getContratistas();
-        setContratistas(data)
-    }
+  const fetchContratistas = async () => {
+    const data = await getContratistasDb();
+    dispatch(getContratistas(data));
+  };
 
-    
-    
+  useEffect(() => {
+    fetchContratistas();
+  }, [dispatch]);
+
   return (
-    <View style={styles.contenedor}>
+    <View>
       <FlatList
         data={contratistas}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Text>{item.nombre} {item.apellido} 
-          Especialidad: {item.especialidad} Teléfono: {item.telefono}</Text>
+          <Text>{item.nombre} {item.apellido}
+            Especialidad: {item.especialidad} Teléfono: {item.telefono}</Text>
         )}
         ListEmptyComponent={<Text>No hay contratistas</Text>}
       />
@@ -28,9 +33,4 @@ export const Contratistas = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  contenedor: {
-    marginHorizontal: 20,
-    marginTop: 20
-  }
-})
+
