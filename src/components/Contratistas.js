@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Button, FlatList } from "react-native";
 import { getContratistasDb } from "../database/Contratistas";
 import { useDispatch, useSelector } from 'react-redux';
-import { getContratistas, addContratista } from "../redux/ContratistaSlice";
+import { getContratistas } from "../redux/ContratistaSlice";
 
 export const Contratistas = () => {
   const dispatch = useDispatch();

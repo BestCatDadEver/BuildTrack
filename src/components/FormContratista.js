@@ -1,15 +1,24 @@
 import React, { useState } from "react"
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
 import { saveContratista } from "../database/Contratistas"
+import { useDispatch, useSelector } from 'react-redux';
+import { addContratista } from "../redux/ContratistaFormSlice";
+
+
+
 export const FormContratista = () => {
+
   const [nombre, setNombre] = useState()
   const [especialidad, setEspecialidad] = useState()
   const [telefono, setTelefono] = useState()
   const [apellido, setapellido] = useState()
 
+  const dispatch = useDispatch();
+
 
   const altaContratistaClick = async () => {
     const data = await saveContratista(nombre, apellido, telefono, especialidad)
+    dispatch(addContratista(data))
     console.log(data)
   }
 

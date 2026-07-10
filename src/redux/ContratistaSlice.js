@@ -16,6 +16,9 @@ const contratistasSlice = createSlice({
         },
         getContratistas:(state, action) => {
             state.contratistasList = action.payload
+        },
+        updateContratista: (state, action) => {
+            state.contratistasList.find()
         }
 
     }
