@@ -28,23 +28,40 @@ export const saveContratista = async (nombre, apellido, telefono, especialidad) 
 
   try {
     const { data, error } = await supabase.from('Contratistas').insert([contratista]).select();
-    
+    return data;
   } catch (e) {
     console.log('ERROR AL INGRESAR PERSONA ->', e)
+    return null;
   }
 
 }
 
-export const deletePersona = async () => {
-
+export const deleteContratistaDb = async (id) => {
   try {
     
     const resp = await supabase
-    .from('contratistas')
+    .from('Contratistas')
     .delete()
-    .eq('id','dd41e3ab-b8ed-4432-b5d4-cfaf7fa63200');
+    .eq('id',id);
+    console.log('SE ELIMINO CORRECTAMENTE')
 
   } catch (e) {
     console.log('ERROR AL ELIMINAR PERSONA -> ', e)
+  }
+}
+
+export const updateContratistaDb = async (modificados) => {
+  try {
+    const { data } = await supabase
+      .from('Contratistas')
+      .update(modificados)
+      .eq('id', modificados.id)
+      .select();
+
+    console.log('SE MODIFICARON LOS DATOS')
+    return data ? data[0] : null;
+  } catch (e) {
+    console.log('Error al actualizar datos -> ', e)
+    return null;
   }
 }

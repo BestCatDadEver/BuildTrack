@@ -7,12 +7,23 @@ const contratistaFormSlice = createSlice({
     name: "contratistaForm",
     initialState: {
         contratistasList: [],
+        contratista: null,
         error: null
     },
     reducers: {
         addContratista: (state, action) => {
             state.contratistasList.push(action.payload);
         },
+        updateContratista: (state, action) => {
+            const index = state.contratistasList.findIndex(
+                c => c.id === action.payload.id
+            );
+
+            if(index !== -1) {
+                state.contratistasList[index] = action.payload
+            }
+        },
+        
         
 
     }
