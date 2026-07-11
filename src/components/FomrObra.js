@@ -11,12 +11,17 @@ export const FomrObra = () => {
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false)
   const [fechaFin, setFechaFin] = useState(new Date())
   const [estadoModal, setEstado] = useState(false)
+  const [frentes, setFrentes] = useState([])
 
   const abrirModal = () => {
     setEstado(true)
   }
   const cerrarModal = () => {
     setEstado(false)
+  }
+  const agregarFrente = (frente) => {
+    setFrentes([...frentes, frente])
+    cerrarModal()
   }
 
   return (
@@ -27,9 +32,9 @@ export const FomrObra = () => {
 
       <View>
         <Text style={styles.label}>Nombre de la obra</Text>
-        <TextInput 
+        <TextInput
           style={styles.input}
-          placeholder="Ej. Complejo San Eduardo" 
+          placeholder="Ej. Complejo San Eduardo"
           placeholderTextColor="#1B365D"
           value={nombreObra}
           onChangeText={SetnombreObra}
@@ -39,9 +44,7 @@ export const FomrObra = () => {
       <View style={styles.row}>
         <View style={styles.col}>
           <Text style={styles.label}>Fecha Inicio</Text>
-          <Pressable
-            onPress={() => setMostrarSelectorFecha(true)}
-            style={styles.dateButton}>
+          <Pressable onPress={() => setMostrarSelectorFecha(true)} style={styles.dateButton}>
             <Text style={styles.dateButtonText}>{fechaInicio.toLocaleDateString()}</Text>
           </Pressable>
           {mostrarSelectorFecha && (
@@ -61,9 +64,7 @@ export const FomrObra = () => {
 
         <View style={styles.col}>
           <Text style={styles.label}>Fecha de Fin</Text>
-          <Pressable
-            onPress={() => setMostrarSelectorFecha(true)}
-            style={styles.dateButton}>
+          <Pressable onPress={() => setMostrarSelectorFecha(true)} style={styles.dateButton}>
             <Text style={styles.dateButtonText}>{fechaFin.toLocaleDateString()}</Text>
           </Pressable>
           {mostrarSelectorFecha && (
@@ -82,14 +83,25 @@ export const FomrObra = () => {
         </View>
       </View>
 
-      <View style={styles.frentesSection}>
+      <View>
         <Text style={styles.subtitle}>Frentes de Obra</Text>
         <Pressable style={styles.secondaryButton} onPress={abrirModal}>
           <Text style={styles.secondaryButtonText}>+ Agregar frente de obra</Text>
         </Pressable>
         <Modal animationType="slide" visible={estadoModal} style={styles.container}>
-          <FrenteObra cerrarModal={cerrarModal}/>
+          <FrenteObra cerrarModal={cerrarModal} AgregarFrenteObra={agregarFrente} />
+        </Modal>
+      </View>
+      {/* espacio */}
+      <View>
+        <Text style={styles.subtitle}>Contratistas</Text>
+        <Pressable style={styles.secondaryButton} onPress={abrirModal}>
+          <Text style={styles.secondaryButtonText}>+ Agregar Contratista</Text>
+        </Pressable>
+        <Modal animationType="slide" visible={estadoModal} style={styles.container}>
+          <FrenteObra cerrarModal={cerrarModal} AgregarFrenteObra={agregarFrente} />
         </Modal>
       </View>
     </ScrollView>
-  )}
+  )
+}

@@ -2,45 +2,52 @@ import React, { useState } from "react"
 import { Pressable, SafeAreaView, Text, TextInput, View } from "react-native"
 import styles from "../styles" // Tu archivo de estilos externo
 
-export const FrenteObra = ({ cerrarModal }) => {
+export const FrenteObra = ({ cerrarModal, AgregarFrenteObra }) => {
   const [nombre, setNombre] = useState("")
-  const [direccion, setDireccion] = useState("")
+  const [latitud, setLatitud] = useState("")
+  const [longitud, setLongitud] = useState("")
+
+  const guardar = () => {
+    const frente = {
+      nombre,
+      latitud,
+      longitud,
+    }
+    AgregarFrenteObra(frente)
+    setNombre("")
+    setLatitud("")
+    setLongitud("")
+    cerrarModal()
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}> 
-        
+      <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Nuevo Frente de Obra</Text>
         </View>
 
         <View>
-          <TextInput 
-            style={styles.input} 
-            placeholder="Nombre" 
-            placeholderTextColor="#9A958A" 
-            value={nombre} 
-            onChangeText={setNombre} 
-          />
-          <TextInput 
-            style={styles.input} 
-            placeholder="Direccion" 
-            placeholderTextColor="#9A958A" 
-            value={direccion} 
-            onChangeText={setDireccion} 
+          <TextInput style={styles.input} placeholder="Nombre" placeholderTextColor="#9A958A" value={nombre} onChangeText={setNombre} />
+          <TextInput style={styles.input} placeholder="Latitud" placeholderTextColor="#9A958A" value={latitud} onChangeText={setLatitud} />
+          <TextInput
+            style={styles.input}
+            placeholder="Longitud"
+            placeholderTextColor="#9A958A"
+            value={longitud}
+            onChangeText={setLongitud}
           />
         </View>
 
         <View style={{ marginTop: 10 }}>
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={guardar}>
             <Text style={styles.buttonText}>Agregar</Text>
           </Pressable>
-          
+
           <Pressable style={[styles.secondaryButton, { marginTop: 10 }]} onPress={cerrarModal}>
             <Text style={styles.secondaryButtonText}>Cancelar</Text>
           </Pressable>
         </View>
-
       </View>
     </SafeAreaView>
   )
