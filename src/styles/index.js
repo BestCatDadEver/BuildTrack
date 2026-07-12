@@ -103,6 +103,13 @@ const styles = StyleSheet.create({
   },
     carta: {
     flexDirection: 'row',
+  listContent: {
+    paddingVertical: 8,
+  },
+  contratistaCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: '#f8efd8',
     borderWidth: 1,
     borderColor: '#1B365D',
@@ -121,6 +128,59 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#1B365D',
+    padding: 12,
+    marginBottom: 10,
+    elevation: 1,
+  },
+  contratistaInfo: {
+    flex: 1,
+    marginRight: 10,
+  },
+  contratistaNombre: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1B365D',
+  },
+  contratistaDetalle: {
+    fontSize: 13,
+    color: '#456491',
+    marginTop: 2,
+  },
+  modificarButton: {
+    backgroundColor: '#f4d7a4',
+    borderWidth: 1,
+    borderColor: '#1B365D',
+    borderRadius: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+  modificarButtonText: {
+    color: '#1B365D',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  contratistaAcciones: {
+    flexDirection: 'column',
+    gap: 6,
+  },
+  eliminarButton: {
+    backgroundColor: '#f8d7da',
+    borderWidth: 1,
+    borderColor: '#8B1E1E',
+    borderRadius: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+  eliminarButtonText: {
+    color: '#8B1E1E',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  listEmptyText: {
+    color: '#1B365D',
+    fontSize: 14,
+    textAlign: 'center',
+    marginVertical: 10,
   },
 });
 
