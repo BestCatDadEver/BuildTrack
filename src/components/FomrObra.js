@@ -8,7 +8,7 @@ import { CardFrente } from "./CardFrente"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { eliminarFrente } from "../redux/frenteSlice"
-import { selectContratistas } from "./selectContratistas"
+import { SelectContratistas } from "./SelectContratistas"
 
 export const FomrObra = () => {
   const dispach = useDispatch()
@@ -16,20 +16,46 @@ export const FomrObra = () => {
   const [fechaInicio, setFechaInicio] = useState(new Date())
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false)
   const [fechaFin, setFechaFin] = useState(new Date())
-  const [estadoModal, setEstado] = useState(false)
+  const [modalFrente, setModalFrente] = useState(false)
+  const [modalContratista, setModalContratista] = useState(false)
+
   // const [frentes, setFrentes] = useState([])
   const frentes = useSelector((store) => store.frente.frentes)
-  
-  const deleteFrente = (frenteId)=>{
+  // const contratistas = useSelector((store) => store.contratistas.contratistasList)
+  const deleteFrente = (frenteId) => {
     dispach(eliminarFrente(frenteId))
   }
 
-  const abrirModal = () => {
-    setEstado(true)
+  // const abrirModal = () => {
+  //   setEstado(true)
+  // }
+  // const cerrarModal = () => {
+  //   setEstado(false)
+  // }
+  const abrirModalFrente = () => {
+    setModalFrente(true)
   }
-  const cerrarModal = () => {
-    setEstado(false)
+
+  const cerrarModalFrente = () => {
+    setModalFrente(false)
   }
+
+  const abrirModalContratista = () => {
+    setModalContratista(true)
+  }
+
+  const cerrarModalContratista = () => {
+    setModalContratista(false)
+  }
+
+  const abrirModalCostos = () => {
+    setModalContratista(true)
+  }
+
+  const cerrarModalCostos = () => {
+    setModalContratista(false)
+  }
+
   const agregarFrente = () => {
     cerrarModal()
   }
@@ -95,16 +121,16 @@ export const FomrObra = () => {
 
       <View>
         <Text style={styles.subtitle}>Frentes de Obra</Text>
-        <Pressable style={styles.secondaryButton} onPress={abrirModal}>
+        <Pressable style={styles.secondaryButton} onPress={abrirModalFrente}>
           <Text style={styles.secondaryButtonText}>+ Agregar frente de obra</Text>
         </Pressable>
-        <Modal animationType="slide" visible={estadoModal} style={styles.container}>
-          <FrenteObra cerrarModal={cerrarModal} AgregarFrenteObra={agregarFrente} />
+        <Modal animationType="slide" visible={modalFrente} style={styles.container}>
+          <FrenteObra cerrarModal={cerrarModalFrente} AgregarFrenteObra={agregarFrente} />
         </Modal>
         {frentes?.length > 0 ? (
           <View>
             {frentes.map((frente) => (
-              <CardFrente key={frente.id} frente={frente} eliminar={deleteFrente}/>
+              <CardFrente key={frente.id} frente={frente} eliminar={deleteFrente} />
             ))}
           </View>
         ) : (
@@ -114,13 +140,30 @@ export const FomrObra = () => {
       {/* espacio */}
       <View>
         <Text style={styles.subtitle}>Contratistas</Text>
-        <Pressable style={styles.secondaryButton} onPress={abrirModal}>
+        <Pressable style={styles.secondaryButton} onPress={abrirModalContratista}>
           <Text style={styles.secondaryButtonText}>+ Agregar Contratista</Text>
         </Pressable>
-        <Modal animationType="slide" visible={estadoModal} style={styles.container}>
-          <selectContratistas cerrarModal={cerrarModal} AgregarFrenteObra={agregarFrente} />
+        <Modal animationType="slide" visible={modalContratista} style={styles.container}>
+          <SelectContratistas cerrarModal={cerrarModalContratista} />
         </Modal>
-        
+        {frentes?.length > 0 ? (
+          <View>
+            {frentes.map((frente) => (
+              <CardFrente key={frente.id} frente={frente} eliminar={deleteFrente} />
+            ))}
+          </View>
+        ) : (
+          <></>
+        )}
+      </View>
+      <View>
+        <Text style={styles.subtitle}>Costos de obra</Text>
+        <Pressable style={styles.secondaryButton} onPress={abrirModalContratista}>
+          <Text style={styles.secondaryButtonText}>+ Agregar Costos</Text>
+        </Pressable>
+        <Modal animationType="slide" visible={modalContratista} style={styles.container}>
+          <FormCosto cerrarModal={cerrarModalContratista} />
+        </Modal>
       </View>
     </ScrollView>
   )
