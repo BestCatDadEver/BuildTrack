@@ -101,6 +101,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
+    carta: {
+    flexDirection: 'row',
   listContent: {
     paddingVertical: 8,
   },
@@ -112,6 +114,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#1B365D',
     borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 12,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8
+  },
+    deleteButton: {
+    backgroundColor: '#f4d7a4',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#1B365D',
     padding: 12,
     marginBottom: 10,
     elevation: 1,

@@ -4,19 +4,63 @@ import { ScrollView } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import { FrenteObra } from "./FrenteObra"
 import styles from "../styles"
+import { CardFrente } from "./CardFrente"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+import { eliminarFrente } from "../redux/frenteSlice"
+import { SelectContratistas } from "./SelectContratistas"
+import { FormCostos } from "./FormCostos"
 
 export const FomrObra = () => {
+  const dispach = useDispatch()
   const [nombreObra, SetnombreObra] = useState("")
   const [fechaInicio, setFechaInicio] = useState(new Date())
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false)
   const [fechaFin, setFechaFin] = useState(new Date())
-  const [estadoModal, setEstado] = useState(false)
+  const [modalFrente, setModalFrente] = useState(false)
+  const [modalContratista, setModalContratista] = useState(false)
+    const [modalCostos, setModalCostos] = useState(false)
 
-  const abrirModal = () => {
-    setEstado(true)
+
+  // const [frentes, setFrentes] = useState([])
+  const frentes = useSelector((store) => store.frente.frentes)
+  // const contratistas = useSelector((store) => store.contratistas.contratistasList)
+  const deleteFrente = (frenteId) => {
+    dispach(eliminarFrente(frenteId))
   }
-  const cerrarModal = () => {
-    setEstado(false)
+
+  // const abrirModal = () => {
+  //   setEstado(true)
+  // }
+  // const cerrarModal = () => {
+  //   setEstado(false)
+  // }
+  const abrirModalFrente = () => {
+    setModalFrente(true)
+  }
+
+  const cerrarModalFrente = () => {
+    setModalFrente(false)
+  }
+
+  const abrirModalContratista = () => {
+    setModalContratista(true)
+  }
+
+  const cerrarModalContratista = () => {
+    setModalContratista(false)
+  }
+
+  const abrirModalCostos = () => {
+    setModalCostos(true)
+  }
+
+  const cerrarModalCostos = () => {
+    setModalCostos(false)
+  }
+
+  const agregarFrente = () => {
+    cerrarModal()
   }
 
   return (
@@ -27,9 +71,9 @@ export const FomrObra = () => {
 
       <View>
         <Text style={styles.label}>Nombre de la obra</Text>
-        <TextInput 
+        <TextInput
           style={styles.input}
-          placeholder="Ej. Complejo San Eduardo" 
+          placeholder="Ej. Complejo San Eduardo"
           placeholderTextColor="#1B365D"
           value={nombreObra}
           onChangeText={SetnombreObra}
@@ -39,9 +83,7 @@ export const FomrObra = () => {
       <View style={styles.row}>
         <View style={styles.col}>
           <Text style={styles.label}>Fecha Inicio</Text>
-          <Pressable
-            onPress={() => setMostrarSelectorFecha(true)}
-            style={styles.dateButton}>
+          <Pressable onPress={() => setMostrarSelectorFecha(true)} style={styles.dateButton}>
             <Text style={styles.dateButtonText}>{fechaInicio.toLocaleDateString()}</Text>
           </Pressable>
           {mostrarSelectorFecha && (
@@ -61,9 +103,7 @@ export const FomrObra = () => {
 
         <View style={styles.col}>
           <Text style={styles.label}>Fecha de Fin</Text>
-          <Pressable
-            onPress={() => setMostrarSelectorFecha(true)}
-            style={styles.dateButton}>
+          <Pressable onPress={() => setMostrarSelectorFecha(true)} style={styles.dateButton}>
             <Text style={styles.dateButtonText}>{fechaFin.toLocaleDateString()}</Text>
           </Pressable>
           {mostrarSelectorFecha && (
@@ -82,14 +122,52 @@ export const FomrObra = () => {
         </View>
       </View>
 
-      <View style={styles.frentesSection}>
+      <View>
         <Text style={styles.subtitle}>Frentes de Obra</Text>
-        <Pressable style={styles.secondaryButton} onPress={abrirModal}>
+        <Pressable style={styles.secondaryButton} onPress={abrirModalFrente}>
           <Text style={styles.secondaryButtonText}>+ Agregar frente de obra</Text>
         </Pressable>
-        <Modal animationType="slide" visible={estadoModal} style={styles.container}>
-          <FrenteObra cerrarModal={cerrarModal}/>
+        <Modal animationType="slide" visible={modalFrente} style={styles.container}>
+          <FrenteObra cerrarModal={cerrarModalFrente} AgregarFrenteObra={agregarFrente} />
+        </Modal>
+        {frentes?.length > 0 ? (
+          <View>
+            {frentes.map((frente) => (
+              <CardFrente key={frente.id} frente={frente} eliminar={deleteFrente} />
+            ))}
+          </View>
+        ) : (
+          <></>
+        )}
+      </View>
+      {/* espacio */}
+      <View>
+        <Text style={styles.subtitle}>Contratistas</Text>
+        <Pressable style={styles.secondaryButton} onPress={abrirModalContratista}>
+          <Text style={styles.secondaryButtonText}>+ Agregar Contratista</Text>
+        </Pressable>
+        <Modal animationType="slide" visible={modalContratista} style={styles.container}>
+          <SelectContratistas cerrarModal={cerrarModalContratista} />
+        </Modal>
+        {frentes?.length > 0 ? (
+          <View>
+            {frentes.map((frente) => (
+              <CardFrente key={frente.id} frente={frente} eliminar={deleteFrente} />
+            ))}
+          </View>
+        ) : (
+          <></>
+        )}
+      </View>
+      <View>
+        <Text style={styles.subtitle}>Costos de obra</Text>
+        <Pressable style={styles.secondaryButton} onPress={abrirModalCostos}>
+          <Text style={styles.secondaryButtonText}>+ Agregar Costos</Text>
+        </Pressable>
+        <Modal animationType="slide" visible={modalCostos} style={styles.container}>
+          <FormCostos cerrarModal={cerrarModalCostos} />
         </Modal>
       </View>
     </ScrollView>
-  )}
+  )
+}

@@ -4,25 +4,25 @@ import styles from "../styles"
 import { useDispatch } from "react-redux"
 import { agregarFrente } from "../redux/frenteSlice";
 
-export const FrenteObra = ({ cerrarModal, AgregarFrenteObra }) => {
+export const FormCostos = ({ cerrarModal}) => {
   const [nombre, setNombre] = useState("")
   const [latitud, setLatitud] = useState("")
   const [longitud, setLongitud] = useState("")
   const dispach = useDispatch();
 
-  const guardar = () => {
-    dispach(agregarFrente({nombre,latitud,longitud}));
-    setNombre("")
-    setLatitud("")
-    setLongitud("")
-    cerrarModal()
-  }
+//   const guardar = () => {
+//     dispach(agregarFrente({nombre,latitud,longitud}));
+//     setNombre("")
+//     setLatitud("")
+//     setLongitud("")
+//     cerrarModal()
+//   }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Nuevo Frente de Obra</Text>
+          <Text style={styles.title}>Costo de obra</Text>
         </View>
 
         <View>
@@ -38,7 +38,7 @@ export const FrenteObra = ({ cerrarModal, AgregarFrenteObra }) => {
         </View>
 
         <View style={{ marginTop: 10 }}>
-          <Pressable style={styles.button} onPress={guardar}>
+          <Pressable style={styles.button} >
             <Text style={styles.buttonText}>Agregar</Text>
           </Pressable>
 
