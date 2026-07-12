@@ -1,28 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { supabase } from "../database/Index";
-import React from 'react'
-import { useDispatch } from 'react-redux';
-
 
 const contratistasSlice = createSlice({
     name: "contratistas",
     initialState: {
         contratistasList: [],
+        selectedContratista: null,
         error: null
     },
     reducers: {
         addContratista: (state, action) => {
             state.contratistasList.push(action.payload);
         },
-        getContratistas:(state, action) => {
+        getContratistas: (state, action) => {
             state.contratistasList = action.payload
         },
         updateContratista: (state, action) => {
-            state.contratistasList.find()
+            const index = state.contratistasList.findIndex(
+                c => c.id === action.payload.id
+            );
+
+            if (index !== -1) {
+                state.contratistasList[index] = action.payload
+            }
+        },
+        deleteContratista: (state, action) => {
+            state.contratistasList = state.contratistasList.filter(
+                c => c.id !== action.payload
+            );
+        },
+        setSelectedContratista: (state, action) => {
+            state.selectedContratista = action.payload;
+        },
+        clearSelectedContratista: (state) => {
+            state.selectedContratista = null;
         }
 
     }
 })
 
-export const { addContratista, getContratistas} = contratistasSlice.actions;
+export const { addContratista, getContratistas, updateContratista, setSelectedContratista, clearSelectedContratista, deleteContratista } = contratistasSlice.actions;
 export default contratistasSlice.reducer;
