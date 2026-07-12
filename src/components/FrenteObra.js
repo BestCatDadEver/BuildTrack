@@ -1,17 +1,28 @@
 import React, { useState } from "react"
 import { Pressable, SafeAreaView, Text, TextInput, View } from "react-native"
-import styles from "../styles" 
+import styles from "../styles"
 import { useDispatch } from "react-redux"
-import { agregarFrente } from "../redux/frenteSlice";
+import { agregarFrente } from "../redux/frenteSlice"
+import { saveFrente } from "../database/frenteObraDb"
 
 export const FrenteObra = ({ cerrarModal, AgregarFrenteObra }) => {
   const [nombre, setNombre] = useState("")
   const [latitud, setLatitud] = useState("")
   const [longitud, setLongitud] = useState("")
-  const dispach = useDispatch();
+  const dispach = useDispatch()
+
+  // const guardarFrente = async () => {
+  //   const data = await saveFrente(nombre, latitud, longitud)
+  //   if (data) {
+  //     dispach(agregarFrente(data.id))
+  //     console.log(data.id, 'c Guardo el frente')
+  //   }
+  // }
+
 
   const guardar = () => {
     dispach(agregarFrente({nombre,latitud,longitud}));
+    // guardarFrente()
     setNombre("")
     setLatitud("")
     setLongitud("")

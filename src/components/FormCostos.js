@@ -1,22 +1,31 @@
 import React, { useState } from "react"
 import { Pressable, SafeAreaView, Text, TextInput, View } from "react-native"
-import styles from "../styles" 
+import styles from "../styles"
 import { useDispatch } from "react-redux"
-import { agregarFrente } from "../redux/frenteSlice";
 
-export const FormCostos = ({ cerrarModal}) => {
+import { saveCosto } from "../database/costoObraDb"
+import { agregarCosto } from "../redux/CostoSlice"
+
+
+export const FormCostos = ({ cerrarModal }) => {
   const [nombre, setNombre] = useState("")
-  const [latitud, setLatitud] = useState("")
-  const [longitud, setLongitud] = useState("")
-  const dispach = useDispatch();
+  const [monto, setMonto] = useState("")
 
-//   const guardar = () => {
-//     dispach(agregarFrente({nombre,latitud,longitud}));
-//     setNombre("")
-//     setLatitud("")
-//     setLongitud("")
-//     cerrarModal()
+  const dispach = useDispatch()
+
+//   const guardarCosto = async () => {
+//     const data = await saveCosto(nombre,Number(monto))
+//     if (data) {
+//       dispach(agregarCosto(data.id))
+//     }
 //   }
+
+  const guardar = () => {
+    dispach(agregarCosto({nombre,monto}));
+    setNombre("")
+    setMonto("")
+    cerrarModal()
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -27,18 +36,11 @@ export const FormCostos = ({ cerrarModal}) => {
 
         <View>
           <TextInput style={styles.input} placeholder="Nombre" placeholderTextColor="#9A958A" value={nombre} onChangeText={setNombre} />
-          <TextInput style={styles.input} placeholder="Latitud" placeholderTextColor="#9A958A" value={latitud} onChangeText={setLatitud} />
-          <TextInput
-            style={styles.input}
-            placeholder="Longitud"
-            placeholderTextColor="#9A958A"
-            value={longitud}
-            onChangeText={setLongitud}
-          />
+          <TextInput style={styles.input} placeholder="Monto" placeholderTextColor="#9A958A" value={monto} onChangeText={setMonto} />
         </View>
 
         <View style={{ marginTop: 10 }}>
-          <Pressable style={styles.button} >
+          <Pressable style={styles.button} onPress={()=>guardar()}>
             <Text style={styles.buttonText}>Agregar</Text>
           </Pressable>
 

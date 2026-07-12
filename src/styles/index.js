@@ -1,7 +1,5 @@
 import { StyleSheet } from "react-native";
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -44,7 +42,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    // Sombra para Android
     elevation: 1,
   },
   row: {
@@ -71,7 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f4d7a4', 
     paddingVertical: 14,
     borderRadius: 8,
-    borderWidth:1,
+    borderWidth: 1,
     borderColor: '#1B365D',
     alignItems: 'center',
     marginTop: 10,
@@ -101,8 +98,27 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
   },
-    carta: {
+  carta: {
     flexDirection: 'row',
+    backgroundColor: '#f8efd8',
+    borderWidth: 1,
+    borderColor: '#1B365D',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 12,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8
+  },
+  deleteButton: {
+    backgroundColor: '#f4d7a4',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#1B365D',
+  },
   listContent: {
     paddingVertical: 8,
   },
@@ -117,20 +133,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginBottom: 12,
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginTop: 8
-  },
-    deleteButton: {
-    backgroundColor: '#f4d7a4',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#1B365D',
-    padding: 12,
-    marginBottom: 10,
-    elevation: 1,
   },
   contratistaInfo: {
     flex: 1,
@@ -146,6 +149,10 @@ const styles = StyleSheet.create({
     color: '#456491',
     marginTop: 2,
   },
+  contratistaAcciones: {
+    flexDirection: 'column',
+    gap: 6,
+  },
   modificarButton: {
     backgroundColor: '#f4d7a4',
     borderWidth: 1,
@@ -158,10 +165,6 @@ const styles = StyleSheet.create({
     color: '#1B365D',
     fontSize: 13,
     fontWeight: '600',
-  },
-  contratistaAcciones: {
-    flexDirection: 'column',
-    gap: 6,
   },
   eliminarButton: {
     backgroundColor: '#f8d7da',
