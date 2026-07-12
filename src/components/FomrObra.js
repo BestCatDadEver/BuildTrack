@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { eliminarFrente } from "../redux/frenteSlice"
 import { SelectContratistas } from "./SelectContratistas"
+import { FormCostos } from "./FormCostos"
 
 export const FomrObra = () => {
   const dispach = useDispatch()
@@ -18,6 +19,8 @@ export const FomrObra = () => {
   const [fechaFin, setFechaFin] = useState(new Date())
   const [modalFrente, setModalFrente] = useState(false)
   const [modalContratista, setModalContratista] = useState(false)
+    const [modalCostos, setModalCostos] = useState(false)
+
 
   // const [frentes, setFrentes] = useState([])
   const frentes = useSelector((store) => store.frente.frentes)
@@ -49,11 +52,11 @@ export const FomrObra = () => {
   }
 
   const abrirModalCostos = () => {
-    setModalContratista(true)
+    setModalCostos(true)
   }
 
   const cerrarModalCostos = () => {
-    setModalContratista(false)
+    setModalCostos(false)
   }
 
   const agregarFrente = () => {
@@ -158,11 +161,11 @@ export const FomrObra = () => {
       </View>
       <View>
         <Text style={styles.subtitle}>Costos de obra</Text>
-        <Pressable style={styles.secondaryButton} onPress={abrirModalContratista}>
+        <Pressable style={styles.secondaryButton} onPress={abrirModalCostos}>
           <Text style={styles.secondaryButtonText}>+ Agregar Costos</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalContratista} style={styles.container}>
-          <FormCosto cerrarModal={cerrarModalContratista} />
+        <Modal animationType="slide" visible={modalCostos} style={styles.container}>
+          <FormCostos cerrarModal={cerrarModalCostos} />
         </Modal>
       </View>
     </ScrollView>
