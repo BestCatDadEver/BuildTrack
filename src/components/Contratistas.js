@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Button, FlatList, Pressable } from "react-native";
-import { getContratistasDb } from "../database/Contratistas";
+import React, { useEffect } from "react";
+import { View, Text, FlatList, Pressable } from "react-native";
+import { getContratistasDb, deleteContratistaDb } from "../database/Contratistas";
 import { useDispatch, useSelector } from 'react-redux';
-import { getContratistas, setSelectedContratista } from "../redux/ContratistaSlice";
+import { getContratistas, setSelectedContratista, deleteContratista } from "../redux/ContratistaSlice";
 import styles from "../styles";
 
 export const Contratistas = () => {
@@ -18,6 +18,11 @@ export const Contratistas = () => {
     fetchContratistas();
   }, [dispatch]);
 
+  const handleDelete = async (id) => {
+    await deleteContratistaDb(id);
+    dispatch(deleteContratista(id));
+  };
+
   return (
     <View>
       <FlatList
@@ -32,9 +37,14 @@ export const Contratistas = () => {
               <Text style={styles.contratistaDetalle}>Especialidad: {item.especialidad}</Text>
               <Text style={styles.contratistaDetalle}>Teléfono: {item.telefono}</Text>
             </View>
-            <Pressable style={styles.modificarButton} onPress={() => dispatch(setSelectedContratista(item))}>
-              <Text style={styles.modificarButtonText}>Modificar</Text>
-            </Pressable>
+            <View style={styles.contratistaAcciones}>
+              <Pressable style={styles.modificarButton} onPress={() => dispatch(setSelectedContratista(item))}>
+                <Text style={styles.modificarButtonText}>Modificar</Text>
+              </Pressable>
+              <Pressable style={styles.eliminarButton} onPress={() => handleDelete(item.id)}>
+                <Text style={styles.eliminarButtonText}>Eliminar</Text>
+              </Pressable>
+            </View>
           </View>
         )}
         ListEmptyComponent={<Text style={styles.listEmptyText}>No hay contratistas</Text>}

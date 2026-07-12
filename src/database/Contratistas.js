@@ -59,7 +59,7 @@ export const updateContratistaDb = async (modificados) => {
       .select();
 
     console.log('SE MODIFICARON LOS DATOS')
-    return data ? data[0] : null;
+    return data;
   } catch (e) {
     console.log('Error al actualizar datos -> ', e)
     return null;

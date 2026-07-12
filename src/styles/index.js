@@ -143,6 +143,23 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
   },
+  contratistaAcciones: {
+    flexDirection: 'column',
+    gap: 6,
+  },
+  eliminarButton: {
+    backgroundColor: '#f8d7da',
+    borderWidth: 1,
+    borderColor: '#8B1E1E',
+    borderRadius: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+  eliminarButtonText: {
+    color: '#8B1E1E',
+    fontSize: 13,
+    fontWeight: '600',
+  },
   listEmptyText: {
     color: '#1B365D',
     fontSize: 14,

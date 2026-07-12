@@ -23,6 +23,11 @@ const contratistasSlice = createSlice({
                 state.contratistasList[index] = action.payload
             }
         },
+        deleteContratista: (state, action) => {
+            state.contratistasList = state.contratistasList.filter(
+                c => c.id !== action.payload
+            );
+        },
         setSelectedContratista: (state, action) => {
             state.selectedContratista = action.payload;
         },
@@ -33,5 +38,5 @@ const contratistasSlice = createSlice({
     }
 })
 
-export const { addContratista, getContratistas, updateContratista, setSelectedContratista, clearSelectedContratista } = contratistasSlice.actions;
+export const { addContratista, getContratistas, updateContratista, setSelectedContratista, clearSelectedContratista, deleteContratista } = contratistasSlice.actions;
 export default contratistasSlice.reducer;
