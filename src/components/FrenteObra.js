@@ -1,19 +1,17 @@
 import React, { useState } from "react"
 import { Pressable, SafeAreaView, Text, TextInput, View } from "react-native"
-import styles from "../styles" // Tu archivo de estilos externo
+import styles from "../styles" 
+import { useDispatch } from "react-redux"
+import { agregarFrente } from "../redux/frenteSlice";
 
 export const FrenteObra = ({ cerrarModal, AgregarFrenteObra }) => {
   const [nombre, setNombre] = useState("")
   const [latitud, setLatitud] = useState("")
   const [longitud, setLongitud] = useState("")
+  const dispach = useDispatch();
 
   const guardar = () => {
-    const frente = {
-      nombre,
-      latitud,
-      longitud,
-    }
-    AgregarFrenteObra(frente)
+    dispach(agregarFrente({nombre,latitud,longitud}));
     setNombre("")
     setLatitud("")
     setLongitud("")

@@ -4,14 +4,25 @@ import { ScrollView } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import { FrenteObra } from "./FrenteObra"
 import styles from "../styles"
+import { CardFrente } from "./CardFrente"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+import { eliminarFrente } from "../redux/frenteSlice"
+import { selectContratistas } from "./selectContratistas"
 
 export const FomrObra = () => {
+  const dispach = useDispatch()
   const [nombreObra, SetnombreObra] = useState("")
   const [fechaInicio, setFechaInicio] = useState(new Date())
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false)
   const [fechaFin, setFechaFin] = useState(new Date())
   const [estadoModal, setEstado] = useState(false)
-  const [frentes, setFrentes] = useState([])
+  // const [frentes, setFrentes] = useState([])
+  const frentes = useSelector((store) => store.frente.frentes)
+  
+  const deleteFrente = (frenteId)=>{
+    dispach(eliminarFrente(frenteId))
+  }
 
   const abrirModal = () => {
     setEstado(true)
@@ -19,8 +30,7 @@ export const FomrObra = () => {
   const cerrarModal = () => {
     setEstado(false)
   }
-  const agregarFrente = (frente) => {
-    setFrentes([...frentes, frente])
+  const agregarFrente = () => {
     cerrarModal()
   }
 
@@ -91,6 +101,15 @@ export const FomrObra = () => {
         <Modal animationType="slide" visible={estadoModal} style={styles.container}>
           <FrenteObra cerrarModal={cerrarModal} AgregarFrenteObra={agregarFrente} />
         </Modal>
+        {frentes?.length > 0 ? (
+          <View>
+            {frentes.map((frente) => (
+              <CardFrente key={frente.id} frente={frente} eliminar={deleteFrente}/>
+            ))}
+          </View>
+        ) : (
+          <></>
+        )}
       </View>
       {/* espacio */}
       <View>
@@ -99,8 +118,9 @@ export const FomrObra = () => {
           <Text style={styles.secondaryButtonText}>+ Agregar Contratista</Text>
         </Pressable>
         <Modal animationType="slide" visible={estadoModal} style={styles.container}>
-          <FrenteObra cerrarModal={cerrarModal} AgregarFrenteObra={agregarFrente} />
+          <selectContratistas cerrarModal={cerrarModal} AgregarFrenteObra={agregarFrente} />
         </Modal>
+        
       </View>
     </ScrollView>
   )
