@@ -65,3 +65,23 @@ export const updateContratistaDb = async (modificados) => {
     return null;
   }
 }
+
+export const getContratistasIds = async (ids) => {
+  try {
+    const { data, error } = await supabase
+      .from('Contratistas')
+      .select('*')
+      .in('id', ids);
+
+    if (error) {
+      console.log('Error al obtener contratistas:', error);
+      return null;
+    }
+
+    return data;
+
+  } catch (e) {
+    console.log('Error:', e);
+    return null;
+  }
+};

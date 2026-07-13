@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Modal, Pressable, Text, TextInput, View } from "react-native"
 import { ScrollView } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
@@ -7,9 +7,17 @@ import styles from "../styles"
 import { CardFrente } from "./CardFrente"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import { eliminarFrente } from "../redux/frenteSlice"
+import { eliminarFrente, limpiarFrentes } from "../redux/frenteSlice"
 import { SelectContratistas } from "./SelectContratistas"
 import { FormCostos } from "./FormCostos"
+import { getFrentesId } from "../database/frenteObraDb"
+import { store } from "../store/Index"
+import { CardCostos } from "./CardCostos"
+import { eliminarCosto, limpiarCostos } from "../redux/CostoSlice"
+import { CardContratista } from "./CardContratista"
+import { getContratistasIds } from "../database/Contratistas"
+import { eliminarContratista, limpiarObra } from "../redux/ObraSlice"
+import { saveProyecto } from "../database/Proyectos"
 
 export const FomrObra = () => {
   const dispach = useDispatch()
@@ -19,49 +27,87 @@ export const FomrObra = () => {
   const [fechaFin, setFechaFin] = useState(new Date())
   const [modalFrente, setModalFrente] = useState(false)
   const [modalContratista, setModalContratista] = useState(false)
-    const [modalCostos, setModalCostos] = useState(false)
-
+  const [modalCostos, setModalCostos] = useState(false)
+  const frentes = useSelector((store) => store.frente.frentes)
+  const costos = useSelector((store) => store.Costo.costos)
+  const IdContratistas = useSelector((store) => store.Obra.IdContratistas)
+  const [contratistas, setContratistas] = useState([])
+  const [descripcion,setDescripcion] = useState("")
 
   // const [frentes, setFrentes] = useState([])
-  const frentes = useSelector((store) => store.frente.frentes)
-  // const contratistas = useSelector((store) => store.contratistas.contratistasList)
+
   const deleteFrente = (frenteId) => {
     dispach(eliminarFrente(frenteId))
   }
+  const deleteCosto = (costoId) => {
+    dispach(eliminarCosto(costoId))
+  }
+  const deleteContratista = (id) => {
+    dispach(eliminarContratista(Number(id)))
+  }
 
-  // const abrirModal = () => {
-  //   setEstado(true)
-  // }
-  // const cerrarModal = () => {
-  //   setEstado(false)
-  // }
   const abrirModalFrente = () => {
     setModalFrente(true)
   }
-
   const cerrarModalFrente = () => {
     setModalFrente(false)
   }
-
   const abrirModalContratista = () => {
     setModalContratista(true)
   }
-
   const cerrarModalContratista = () => {
     setModalContratista(false)
   }
-
   const abrirModalCostos = () => {
     setModalCostos(true)
   }
-
   const cerrarModalCostos = () => {
     setModalCostos(false)
   }
-
   const agregarFrente = () => {
     cerrarModal()
   }
+  
+  const resetForm=()=>{
+    setDescripcion("")
+    setFechaFin(new Date())
+    setFechaInicio(new Date())
+    SetnombreObra("")
+    setContratistas([])
+    dispach(limpiarFrentes())
+    dispach(limpiarCostos())
+    dispach(limpiarObra())
+  }
+
+
+  const agregarObra=async ()=>{
+    const data = await saveProyecto(nombreObra,fechaInicio,fechaFin,descripcion)
+  }
+
+
+  // useEffect(() => {
+  //   const cargarFrentes = async () => {
+  //     const data = await getFrentesId(frentesId)
+  //     console.log(data)
+  //     setFrentes(data)
+  //   }
+  //   if (frentesId.length > 0) {
+  //     cargarFrentes()
+  //   } else {
+  //     setFrentes([])
+  //   }
+  // }, [frentesId])
+
+  useEffect(() => {
+    const cargarContratistas = async () => {
+      const data = await getContratistasIds(IdContratistas)
+      setContratistas(data)
+    }
+
+    if (IdContratistas.length > 0) {
+      cargarContratistas()
+    }
+  }, [IdContratistas])
 
   return (
     <ScrollView style={styles.container}>
@@ -149,10 +195,10 @@ export const FomrObra = () => {
         <Modal animationType="slide" visible={modalContratista} style={styles.container}>
           <SelectContratistas cerrarModal={cerrarModalContratista} />
         </Modal>
-        {frentes?.length > 0 ? (
+        {contratistas?.length > 0 ? (
           <View>
-            {frentes.map((frente) => (
-              <CardFrente key={frente.id} frente={frente} eliminar={deleteFrente} />
+            {contratistas.map((contratista) => (
+              <CardContratista key={contratista.id} contratista={contratista} eliminar={deleteContratista} />
             ))}
           </View>
         ) : (
@@ -167,6 +213,26 @@ export const FomrObra = () => {
         <Modal animationType="slide" visible={modalCostos} style={styles.container}>
           <FormCostos cerrarModal={cerrarModalCostos} />
         </Modal>
+        {costos?.length > 0 ? (
+          <View>
+            {costos.map((costo) => (
+              <CardCostos key={costo.id} costo={costo} eliminar={deleteCosto} />
+            ))}
+          </View>
+        ) : (
+          <></>
+        )}
+      </View>
+      <View>
+      {/* necesitamos un text area para la descripcion */}
+      </View>
+      <View style={[styles.row,styles.margintop]}>
+        <Pressable style={[styles.eliminarButton]}>
+          <Text>Cancelar Obra</Text>
+        </Pressable>
+        <Pressable style={styles.modificarButton}>
+          <Text>Confirmar Obra</Text>
+        </Pressable>
       </View>
     </ScrollView>
   )

@@ -8,7 +8,7 @@ export const CardCostos = ({ costo, eliminar }) => {
       <Text style={styles.buttonText}>{costo.nombre}</Text>
       <Text style={styles.buttonText}>{costo.monto}</Text>
 
-      <Pressable style={styles.deleteButton} onPress={() => eliminar(frente.id)}>
+      <Pressable style={styles.deleteButton} onPress={() => eliminar(costo.id)}>
         <Text style={styles.buttonText}>X</Text>
       </Pressable>
     </View>
