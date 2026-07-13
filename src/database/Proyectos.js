@@ -100,7 +100,7 @@ export const insertFrentesDeObraPorProyecto = async(proyectoId, idFrentesDeObra)
 export const insertCostoFrentePorProyecto = async(proyectoId, costos) => {
   const costoObra = costos.map((costo) => ({
     proyecto_id: proyectoId,
-    tipo_costo: costo.tipo_costo,
+    tipo_costo: costo.nombre,
     monto: costo.monto
   }))
   
