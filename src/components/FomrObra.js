@@ -81,8 +81,9 @@ export const FomrObra = () => {
 
 
   const agregarObra = async () => {
-    const data = await saveProyecto(nombreObra, fechaInicio, fechaFin, descripcion)
+    const data = await saveProyecto(nombreObra, fechaInicio, fechaFin, descripcion, IdContratistas, frentes, costos)
     dispach(saveProyecto)
+    resetForm()
   }
 
 
@@ -105,7 +106,7 @@ export const FomrObra = () => {
       setContratistas(data)
     }
 
-    if (IdContratistas.length > 0) {
+    if (IdContratistas.length >= 0) {
       cargarContratistas()
     }
   }, [IdContratistas])
@@ -240,7 +241,8 @@ export const FomrObra = () => {
         <Pressable style={[styles.eliminarButton]}>
           <Text>Cancelar Obra</Text>
         </Pressable>
-        <Pressable style={styles.modificarButton}>
+        <Pressable style={styles.modificarButton}
+        onPress={agregarObra}>
           <Text>Confirmar Obra</Text>
         </Pressable>
       </View>
