@@ -228,13 +228,15 @@ export const FomrObra = () => {
         )}
       </View>
 
+        <Text style={styles.subtitle}>Descripción</Text>
+
       <View  style={[styles.margintop]}>
         <TextInput style={styles.inputDescripcion}
           placeholderTextColor="#1B365D"
           multiline={true}
           value={descripcion}
           onChangeText={setDescripcion}
-          placeholder="Descripción de la obra" />
+          placeholder="Casa de campo - Los Pinos" />
       </View>
 
       <View style={[styles.row, styles.margintop]}>
