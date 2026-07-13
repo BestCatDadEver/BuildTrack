@@ -8,7 +8,7 @@ import { CardFrente } from "./CardFrente"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { eliminarFrente, limpiarFrentes } from "../redux/frenteSlice"
-import { SelectContratistas } from "./SelectContratistas"
+import { SelectContratistas } from "./selectContratistas"
 import { FormCostos } from "./FormCostos"
 import { getFrentesId } from "../database/frenteObraDb"
 import { store } from "../store/Index"
@@ -20,7 +20,7 @@ import { eliminarContratista, limpiarObra } from "../redux/ObraSlice"
 import { saveProyecto } from "../database/Proyectos"
 
 export const FomrObra = () => {
-  const dispach = useDispatch()
+  const dispatch = useDispatch()
   const [nombreObra, SetnombreObra] = useState("")
   const [fechaInicio, setFechaInicio] = useState(new Date())
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false)
@@ -32,18 +32,18 @@ export const FomrObra = () => {
   const costos = useSelector((store) => store.Costo.costos)
   const IdContratistas = useSelector((store) => store.Obra.IdContratistas)
   const [contratistas, setContratistas] = useState([])
-  const [descripcion,setDescripcion] = useState("")
+  const [descripcion, setDescripcion] = useState("")
 
   // const [frentes, setFrentes] = useState([])
 
   const deleteFrente = (frenteId) => {
-    dispach(eliminarFrente(frenteId))
+    dispatch(eliminarFrente(frenteId))
   }
   const deleteCosto = (costoId) => {
-    dispach(eliminarCosto(costoId))
+    dispatch(eliminarCosto(costoId))
   }
   const deleteContratista = (id) => {
-    dispach(eliminarContratista(Number(id)))
+    dispatch(eliminarContratista(id))
   }
 
   const abrirModalFrente = () => {
@@ -67,8 +67,8 @@ export const FomrObra = () => {
   const agregarFrente = () => {
     cerrarModal()
   }
-  
-  const resetForm=()=>{
+
+  const resetForm = () => {
     setDescripcion("")
     setFechaFin(new Date())
     setFechaInicio(new Date())
@@ -80,8 +80,9 @@ export const FomrObra = () => {
   }
 
 
-  const agregarObra=async ()=>{
-    const data = await saveProyecto(nombreObra,fechaInicio,fechaFin,descripcion)
+  const agregarObra = async () => {
+    const data = await saveProyecto(nombreObra, fechaInicio, fechaFin, descripcion)
+    dispach(saveProyecto)
   }
 
 
@@ -198,7 +199,9 @@ export const FomrObra = () => {
         {contratistas?.length > 0 ? (
           <View>
             {contratistas.map((contratista) => (
-              <CardContratista key={contratista.id} contratista={contratista} eliminar={deleteContratista} />
+              <CardContratista key={contratista.id} 
+              contratista={contratista} 
+              eliminar={deleteContratista} />
             ))}
           </View>
         ) : (
@@ -223,10 +226,17 @@ export const FomrObra = () => {
           <></>
         )}
       </View>
-      <View>
-      {/* necesitamos un text area para la descripcion */}
+
+      <View  style={[styles.margintop]}>
+        <TextInput style={styles.inputDescripcion}
+          placeholderTextColor="#1B365D"
+          multiline={true}
+          value={descripcion}
+          onChangeText={setDescripcion}
+          placeholder="Descripción de la obra" />
       </View>
-      <View style={[styles.row,styles.margintop]}>
+
+      <View style={[styles.row, styles.margintop]}>
         <Pressable style={[styles.eliminarButton]}>
           <Text>Cancelar Obra</Text>
         </Pressable>

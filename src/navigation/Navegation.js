@@ -14,7 +14,32 @@ const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
 const Mytabs = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          borderRadius: 24,
+          marginHorizontal: 12,
+          marginBottom: 10,
+          borderTopWidth: 0,
+          height: 60,
+          backgroundColor: "transparent",
+          elevation: 0,
+          paddingBottom: 8,
+        },
+        headerStyle: {
+          backgroundColor: "#1B365D",
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+        tabBarActiveTintColor: "#ffffff",
+        tabBarInactiveTintColor: "rgba(255,255,255,0.45)",
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontWeight: "600",
+        },
+      }}>
       <Tab.Screen
         name="Contratistas"
         component={AltaContratista}

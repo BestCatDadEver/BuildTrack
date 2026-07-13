@@ -23,6 +23,14 @@ export const saveProyecto = async (nombre,fechaInicio,fechaFin,descripcion) =>{
     descripcion:descripcion
   }
 
+  try {
+    const { data } = await supabase.from("Proyectos").insert([obra]).select();
+    return data;
+  } catch(e) {
+    console.log("Error al ingresar la obra")
+    return null;
+  }
+
 }
 
 export const saveContratista = async (nombre, apellido, telefono, especialidad) => {
