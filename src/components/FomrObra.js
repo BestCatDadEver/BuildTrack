@@ -7,15 +7,17 @@ import styles from "../styles"
 import { CardFrente } from "./CardFrente"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import { eliminarFrente } from "../redux/frenteSlice"
+import { eliminarFrente, limpiarFrentes } from "../redux/frenteSlice"
 import { SelectContratistas } from "./SelectContratistas"
 import { FormCostos } from "./FormCostos"
 import { getFrentesId } from "../database/frenteObraDb"
 import { store } from "../store/Index"
 import { CardCostos } from "./CardCostos"
-import { eliminarCosto } from "../redux/CostoSlice"
+import { eliminarCosto, limpiarCostos } from "../redux/CostoSlice"
 import { CardContratista } from "./CardContratista"
 import { getContratistasIds } from "../database/Contratistas"
+import { eliminarContratista, limpiarObra } from "../redux/ObraSlice"
+import { saveProyecto } from "../database/Proyectos"
 
 export const FomrObra = () => {
   const dispach = useDispatch()
@@ -30,6 +32,7 @@ export const FomrObra = () => {
   const costos = useSelector((store) => store.Costo.costos)
   const IdContratistas = useSelector((store) => store.Obra.IdContratistas)
   const [contratistas, setContratistas] = useState([])
+  const [descripcion,setDescripcion] = useState("")
 
   // const [frentes, setFrentes] = useState([])
 
@@ -39,7 +42,9 @@ export const FomrObra = () => {
   const deleteCosto = (costoId) => {
     dispach(eliminarCosto(costoId))
   }
-  const deleteContratista = () => {}
+  const deleteContratista = (id) => {
+    dispach(eliminarContratista(Number(id)))
+  }
 
   const abrirModalFrente = () => {
     setModalFrente(true)
@@ -62,6 +67,23 @@ export const FomrObra = () => {
   const agregarFrente = () => {
     cerrarModal()
   }
+  
+  const resetForm=()=>{
+    setDescripcion("")
+    setFechaFin(new Date())
+    setFechaInicio(new Date())
+    SetnombreObra("")
+    setContratistas([])
+    dispach(limpiarFrentes())
+    dispach(limpiarCostos())
+    dispach(limpiarObra())
+  }
+
+
+  const agregarObra=async ()=>{
+    const data = await saveProyecto(nombreObra,fechaInicio,fechaFin,descripcion)
+  }
+
 
   // useEffect(() => {
   //   const cargarFrentes = async () => {
@@ -201,11 +223,14 @@ export const FomrObra = () => {
           <></>
         )}
       </View>
-      <View style={styles.row}>
-        <Pressable>
+      <View>
+      {/* necesitamos un text area para la descripcion */}
+      </View>
+      <View style={[styles.row,styles.margintop]}>
+        <Pressable style={[styles.eliminarButton]}>
           <Text>Cancelar Obra</Text>
         </Pressable>
-        <Pressable>
+        <Pressable style={styles.modificarButton}>
           <Text>Confirmar Obra</Text>
         </Pressable>
       </View>

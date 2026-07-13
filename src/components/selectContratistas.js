@@ -5,9 +5,9 @@ import { CardContratista } from "./CardContratista"
 import { getContratistasDb } from "../database/Contratistas"
 import { useDispatch, useSelector } from "react-redux"
 import { getContratistas } from "../redux/ContratistaSlice"
-import { agregarContratistaObra } from "../redux/ObraSlice"
+import { agregarContratistaObra, eliminarContratista } from "../redux/ObraSlice"
 
-export const SelectContratistas = ({ cerrarModal }) => {
+export const SelectContratistas = ({ cerrarModal,eliminar }) => {
   const dispatch = useDispatch()
   const ListContratistas = useSelector((state) => state.contratistas.contratistasList)
 
@@ -23,7 +23,6 @@ export const SelectContratistas = ({ cerrarModal }) => {
     dispatch(agregarContratistaObra(id))
   }
 
-  
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
