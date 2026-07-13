@@ -205,6 +205,11 @@ const styles = StyleSheet.create({
   margintop:{
     marginTop:8
   },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 })
 
 export default styles

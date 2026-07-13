@@ -1,31 +1,49 @@
 import React, { useState } from 'react'
-import { Pressable, SafeAreaView, ScrollView, Text } from 'react-native'
+import { Pressable, SafeAreaView, ScrollView, Text, ActivityIndicator } from 'react-native'
 import { View } from 'react-native'
 import { ObraInfo } from '../components/ObraInfo'
 import { useNavigation } from "@react-navigation/native";
 import styles from '../styles';
-import { getProyectos } from '../database/Proyectos';
+import { getProyectos, eliminarProyecto } from '../database/Proyectos';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FlatList } from 'react-native';
+import { useFocusEffect } from "@react-navigation/native";
 
 
 export const Listado = () => {
     const navigation = useNavigation();
     const [listaObras, setListaObras] = useState([]);
+    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
 
 
     const obtenerObras = async () => {
+        setLoading(true)
         const data = await getProyectos();
         setListaObras(data);
+        setLoading(false)
     };
+
+    const handleDelete = async (id) => {
+        eliminarProyecto(id)
+        obtenerObras()
+    }
 
     useEffect(() => {
         obtenerObras();
     }, []);
 
 
+    if (loading) {
+        return (
+            <View style={styles.center}>
+                <ActivityIndicator size="large" color="#1B365D" />
+                <Text>Cargando obras...</Text>
+            </View>
+        );
+    }
+    
     return (
         <SafeAreaView style={styles.container}>
             <FlatList

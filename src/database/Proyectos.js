@@ -31,15 +31,15 @@ export const saveProyecto = async (nombre, fechaInicio, fechaFin, descripcion, I
       await insertContratistaPorProyecto(proyectoId, IdContratistas)
     }
 
-    if(frentesDeObra?.length > 0) {
+    if (frentesDeObra?.length > 0) {
       await insertFrentesDeObraPorProyecto(proyectoId, frentesDeObra)
     }
 
-     if(costoObra?.length > 0) {
+    if (costoObra?.length > 0) {
       await insertCostoFrentePorProyecto(proyectoId, costoObra)
     }
-    
-    
+
+
 
     return data;
   } catch (e) {
@@ -71,14 +71,14 @@ export const insertContratistaPorProyecto = async (proyectoId, IdContratistas) =
   }
 }
 
-export const insertFrentesDeObraPorProyecto = async(proyectoId, idFrentesDeObra) => {
+export const insertFrentesDeObraPorProyecto = async (proyectoId, idFrentesDeObra) => {
   const frenteObra = idFrentesDeObra.map((frenteObra) => ({
     id_proyecto: proyectoId,
     latitud: frenteObra.latitud,
     longitud: frenteObra.longitud,
     nombre: frenteObra.nombre
   }))
-  
+
 
   try {
     const { data, error } = await supabase
@@ -89,7 +89,7 @@ export const insertFrentesDeObraPorProyecto = async(proyectoId, idFrentesDeObra)
     if (error) {
       console.log(error)
 
-    } 
+    }
     return data
   } catch (e) {
     console.log(e)
@@ -97,13 +97,13 @@ export const insertFrentesDeObraPorProyecto = async(proyectoId, idFrentesDeObra)
   }
 }
 
-export const insertCostoFrentePorProyecto = async(proyectoId, costos) => {
+export const insertCostoFrentePorProyecto = async (proyectoId, costos) => {
   const costoObra = costos.map((costo) => ({
     proyecto_id: proyectoId,
     tipo_costo: costo.nombre,
     monto: costo.monto
   }))
-  
+
 
   try {
     const { data, error } = await supabase
@@ -111,13 +111,13 @@ export const insertCostoFrentePorProyecto = async(proyectoId, costos) => {
       .insert(costoObra)
       .select()
 
-      console.log(costoObra)
+    console.log(costoObra)
 
 
     if (error) {
       console.log(error)
 
-    } 
+    }
     return data
   } catch (e) {
     console.log(e)
@@ -126,23 +126,13 @@ export const insertCostoFrentePorProyecto = async(proyectoId, costos) => {
 }
 
 
-
-export const saveContratista = async (nombre, apellido, telefono, especialidad) => {
-  let contratista = {
-    nombre: nombre,
-    telefono: telefono,
-    apellido: apellido,
-    especialidad: especialidad,
-    created_at: new Date()
-
-  }
-
+export const eliminarProyecto = async (id) => {
   try {
-    const { data, error } = await supabase.from('Contratistas').insert([contratista]).select();
-    return data;
+    const { error } = await supabase.from("Proyectos").delete().eq("id", id)
+    if (error) throw error
+    return true
   } catch (e) {
-    console.log('ERROR AL INGRESAR PERSONA ->', e)
-    return null;
+    console.log("Error al eliminar el proyecto", e)
+    return false
   }
-
 }
