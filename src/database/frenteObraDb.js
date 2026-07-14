@@ -56,9 +56,9 @@ export const getFrentesId = async (ids) => {
 export const getFrente = async () => {
   let resp;
   try {
-      const { data } = await supabase
-                    .from('Frente_Obras')
-                    .select('*');
+    const { data } = await supabase
+      .from('Frente_Obras')
+      .select('*');
     resp = data;
     console.log(resp)
   } catch (e) {
@@ -71,14 +71,30 @@ export const getFrente = async () => {
 
 export const deleteFrente = async (id) => {
   try {
-    
+
     const resp = await supabase
-    .from('Frente_Obras')
-    .delete()
-    .eq('id',id);
+      .from('Frente_Obras')
+      .delete()
+      .eq('id', id);
     console.log('SE ELIMINO CORRECTAMENTE')
 
   } catch (e) {
     console.log('ERROR AL ELIMINAR FRENTE -> ', e)
   }
+}
+
+export const getFrentesPorProyecto = async (proyectoId) => {
+
+  try {
+    const { data, error } = await supabase.from("Frente_Obras").select("*").eq("id_proyecto", proyectoId)
+    if (error) {
+      console.log(error);
+      return []
+    }
+    return data
+  } catch (e) {
+    console.log(e)
+    return []
+  }
+
 }

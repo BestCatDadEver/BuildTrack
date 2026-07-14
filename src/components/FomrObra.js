@@ -7,18 +7,19 @@ import styles from "../styles"
 import { CardFrente } from "./CardFrente"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import { eliminarFrente, limpiarFrentes } from "../redux/frenteSlice"
-import { SelectContratistas } from "./SelectContratistas"
+import { eliminarFrente, limpiarFrentes, agregarFrente } from "../redux/frenteSlice"
+import { SelectContratistas } from "./selectContratistas"
 import { FormCostos } from "./FormCostos"
-import { getFrentesId } from "../database/frenteObraDb"
+import { getFrentesId, getFrentesPorProyecto } from "../database/frenteObraDb"
 import { store } from "../store/Index"
 import { CardCostos } from "./CardCostos"
-import { eliminarCosto, limpiarCostos } from "../redux/CostoSlice"
+import { eliminarCosto, limpiarCostos, agregarCosto } from "../redux/CostoSlice"
 import { CardContratista } from "./CardContratista"
-import { getContratistasIds } from "../database/Contratistas"
-import { eliminarContratista, limpiarObra } from "../redux/ObraSlice"
-import { saveProyecto } from "../database/Proyectos"
-import { useNavigation } from "@react-navigation/native"
+import { getContratistasIds, getContratistasPorProyecto } from "../database/Contratistas"
+import { eliminarContratista, limpiarObra, agregarContratistaObra } from "../redux/ObraSlice"
+import { saveProyecto, editarProyecto } from "../database/Proyectos"
+import { useNavigation, useRoute } from "@react-navigation/native"
+import { getCostosPorProyecto } from "../database/costoObraDb"
 
 export const FomrObra = () => {
   const dispatch = useDispatch()
@@ -35,6 +36,9 @@ export const FomrObra = () => {
   const IdContratistas = useSelector((store) => store.Obra.IdContratistas)
   const [contratistas, setContratistas] = useState([])
   const [descripcion, setDescripcion] = useState("")
+
+  const route = useRoute()
+  const { accion, obra } = route.params ?? {}
 
   // const [frentes, setFrentes] = useState([])
 
@@ -92,6 +96,14 @@ export const FomrObra = () => {
     resetForm()
     navegation.goBack()
   }
+
+  const modificarObra = async () => {
+    const data = await editarProyecto(obra.id, nombreObra, fechaInicio, fechaFin, descripcion, IdContratistas, frentes, costos)
+    resetForm()
+    navegation.goBack()
+  }
+
+
   // useEffect(() => {
   //   const cargarFrentes = async () => {
   //     const data = await getFrentesId(frentesId)
@@ -115,6 +127,36 @@ export const FomrObra = () => {
       cargarContratistas()
     }
   }, [IdContratistas])
+
+
+  useEffect(() => {
+  const cargarDatosObra = async () => {
+    if (accion === "modificar" && obra) {
+      SetnombreObra(obra.nombre)
+      setFechaInicio(new Date(obra.fecha_inicio))
+      setFechaFin(new Date(obra.fecha_fin_estimada))
+      setDescripcion(obra.descripcion)
+
+
+      //Se usa Promise.All para esperar que las 3 operaciones se completen.
+      const [frentesDb, costosDb, contratistasDb] = await Promise.all([
+        getFrentesPorProyecto(obra.id),
+        getCostosPorProyecto(obra.id),
+        getContratistasPorProyecto(obra.id),
+      ])
+
+      dispatch(limpiarFrentes())
+      frentesDb.forEach((f) => dispatch(agregarFrente(f)))
+
+      dispatch(limpiarCostos())
+      costosDb.forEach((c) => dispatch(agregarCosto(c)))
+
+      dispatch(limpiarObra())
+      contratistasDb.forEach((c) => dispatch(agregarContratistaObra(c.id)))
+    }
+  }
+  cargarDatosObra()
+}, [accion, obra])
 
   return (
     <ScrollView style={styles.container}>
@@ -248,8 +290,8 @@ export const FomrObra = () => {
         <Pressable onPress={cancelarObra} style={[styles.eliminarButton]}>
           <Text>Cancelar Obra</Text>
         </Pressable>
-        <Pressable style={styles.modificarButton} onPress={agregarObra}>
-          <Text>Confirmar Obra</Text>
+        <Pressable style={styles.modificarButton} onPress={accion === "modificar" ? modificarObra : agregarObra}>
+          <Text>{accion === "modificar" ? "Modificar Obra" : "Confirmar Obra"}</Text>
         </Pressable>
       </View>
     </ScrollView>

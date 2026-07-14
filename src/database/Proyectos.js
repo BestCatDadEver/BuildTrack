@@ -122,13 +122,52 @@ export const calcularCosto = async (id) => {
     if (error) throw error
     let total = 0
 
-    data.forEach((costo)=>{
+    data.forEach((costo) => {
       total += costo.monto
     })
 
     return total
   } catch (e) {
     console.log("Error al eliminar el proyecto", e)
+    return null
+  }
+}
+
+
+export const editarProyecto = async (id, nombre, fechaInicio, fechaFin, descripcion, IdContratistas, frentesDeObra, costoObra) => {
+  try {
+    const { data, error } = await supabase
+      .from("Proyectos")
+      .update({
+        nombre: nombre,
+        fecha_inicio: fechaInicio,
+        fecha_fin_estimada: fechaFin,
+        descripcion: descripcion,
+      })
+      .eq("id", id)
+      .select()
+      .single()
+
+    if (error) throw error
+
+    await supabase.from("Proyecto_Contratista").delete().eq("id_proyecto", id)
+    if (IdContratistas?.length > 0) {
+      await insertContratistaPorProyecto(id, IdContratistas)
+    }
+
+    await supabase.from("Frente_Obras").delete().eq("id_proyecto", id)
+    if (frentesDeObra?.length > 0) {
+      await insertFrentesDeObraPorProyecto(id, frentesDeObra)
+    }
+
+    await supabase.from("Costo_Obra").delete().eq("proyecto_id", id)
+    if (costoObra?.length > 0) {
+      await insertCostoFrentePorProyecto(id, costoObra)
+    }
+
+    return data
+  } catch (e) {
+    console.log("Error al editar la obra", e)
     return null
   }
 }

@@ -1,11 +1,11 @@
-import { supabase } from "./Index"; 
+import { supabase } from "./Index";
 
 export const getContratistasDb = async () => {
   let resp;
   try {
-      const { data } = await supabase
-                    .from('Contratistas')
-                    .select('*');
+    const { data } = await supabase
+      .from('Contratistas')
+      .select('*');
     resp = data;
     console.log(resp)
   } catch (e) {
@@ -23,7 +23,7 @@ export const saveContratista = async (nombre, apellido, telefono, especialidad) 
     apellido: apellido,
     especialidad: especialidad,
     created_at: new Date()
-    
+
   }
 
   try {
@@ -38,11 +38,11 @@ export const saveContratista = async (nombre, apellido, telefono, especialidad) 
 
 export const deleteContratistaDb = async (id) => {
   try {
-    
+
     const resp = await supabase
-    .from('Contratistas')
-    .delete()
-    .eq('id',id);
+      .from('Contratistas')
+      .delete()
+      .eq('id', id);
     console.log('SE ELIMINO CORRECTAMENTE')
 
   } catch (e) {
@@ -85,3 +85,22 @@ export const getContratistasIds = async (ids) => {
     return null;
   }
 };
+
+export const getContratistasPorProyecto = async (proyectoId) => {
+
+  try {
+    const { data, error } = await supabase
+      .from("Proyecto_Contratista")
+      .select("id_contratista, Contratistas(*)")
+      .eq("id_proyecto", proyectoId)
+    if (error) {
+      console.log(error);
+      return []
+    }
+    return data.map((fila) => fila.Contratistas) 
+  } catch (e) {
+    console.log(e)
+    return []
+  }
+
+}

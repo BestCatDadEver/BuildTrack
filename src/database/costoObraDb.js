@@ -4,9 +4,9 @@ export const saveCosto = async (nombre, monto) => {
   let costo = {
     tipo_costo: nombre,
     monto: Number(monto),
-    
+
   }
-    try {
+  try {
     const { data, error } = await supabase.from('Costo_Obra').insert([costo]).select().single();
     return data;
   } catch (e) {
@@ -19,9 +19,9 @@ export const saveCosto = async (nombre, monto) => {
 export const getCosto = async () => {
   let resp;
   try {
-      const { data } = await supabase
-                    .from('Costo_Obra')
-                    .select('*');
+    const { data } = await supabase
+      .from('Costo_Obra')
+      .select('*');
     resp = data;
     console.log(resp)
   } catch (e) {
@@ -34,14 +34,29 @@ export const getCosto = async () => {
 
 export const deleteCosto = async (id) => {
   try {
-    
+
     const resp = await supabase
-    .from('Costo_Obra')
-    .delete()
-    .eq('id',id);
+      .from('Costo_Obra')
+      .delete()
+      .eq('id', id);
     console.log('SE ELIMINO CORRECTAMENTE')
 
   } catch (e) {
     console.log('ERROR AL ELIMINAR Costo -> ', e)
   }
+}
+
+export const getCostosPorProyecto = async (proyectoId) => {
+  try {
+    const { data, error } = await supabase.from("Costo_Obra").select("*").eq("proyecto_id", proyectoId)
+    if (error) {
+      console.log(error);
+      return []
+    }
+    return data
+  } catch (e) {
+    console.log(e)
+    return []
+  }
+  a
 }
