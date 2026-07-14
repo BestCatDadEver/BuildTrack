@@ -291,11 +291,11 @@ export const FomrObra = () => {
       </View>
 
       <View style={[styles.row, styles.margintop]}>
-        <Pressable onPress={cancelarObra} style={[styles.eliminarButton]}>
-          <Text>Cancelar Obra</Text>
+        <Pressable onPress={cancelarObra} style={styles.cancelarObraButton}>
+          <Text style={styles.cancelarObraButtonText}>Cancelar Obra</Text>
         </Pressable>
-        <Pressable style={styles.modificarButton} onPress={accion === "modificar" ? modificarObra : agregarObra}>
-          <Text>{accion === "modificar" ? "Modificar Obra" : "Confirmar Obra"}</Text>
+        <Pressable style={styles.confirmarObraButton} onPress={accion === "modificar" ? modificarObra : agregarObra}>
+          <Text style={styles.confirmarObraButtonText}>{accion === "modificar" ? "Modificar Obra" : "Confirmar Obra"}</Text>
         </Pressable>
       </View>
     </ScrollView>
