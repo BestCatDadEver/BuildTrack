@@ -1,52 +1,91 @@
-import React, { useState } from 'react'
-import { Pressable, SafeAreaView, ScrollView, Text, ActivityIndicator } from 'react-native'
-import { View } from 'react-native'
-import { ObraInfo } from '../components/ObraInfo'
-import { useNavigation } from "@react-navigation/native";
-import styles from '../styles';
-import { getProyectos, eliminarProyecto } from '../database/Proyectos';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { FlatList } from 'react-native';
-import { useFocusEffect } from "@react-navigation/native";
-
+import React, { useCallback, useState } from "react"
+import { Pressable, SafeAreaView, ScrollView, Text, ActivityIndicator } from "react-native"
+import { View } from "react-native"
+import { ObraInfo } from "../components/ObraInfo"
+import { useNavigation } from "@react-navigation/native"
+import styles from "../styles"
+import { getProyectos, eliminarProyecto } from "../database/Proyectos"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { FlatList } from "react-native"
+import { useFocusEffect } from "@react-navigation/native"
 
 export const Listado = () => {
-    const navigation = useNavigation();
-    const [listaObras, setListaObras] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const dispatch = useDispatch();
+  const navigation = useNavigation()
+  const [listaObras, setListaObras] = useState([])
+  const [loading, setLoading] = useState(true)
+  const dispatch = useDispatch()
 
+  const obtenerObras = async () => {
+    setLoading(true)
+    const data = await getProyectos()
+    setListaObras(data)
+    setLoading(false)
+  }
 
-    const obtenerObras = async () => {
-        setLoading(true)
-        const data = await getProyectos();
-        setListaObras(data);
-        setLoading(false)
-    };
+  const eliminarObra = async (id) => {
+    eliminarProyecto(id)
+    obtenerObras()
+  }
 
-    const handleDelete = async (id) => {
-        eliminarProyecto(id)
-        obtenerObras()
-    }
+  useFocusEffect(
+    useCallback(() => {
+      setListaObras([])
+      obtenerObras()
+      console.log(listaObras)
+    }, []),
+  )
 
-    useEffect(() => {
-        obtenerObras();
-    }, []);
-
-
-    if (loading) {
-        return (
-            <View style={styles.center}>
-                <ActivityIndicator size="large" color="#1B365D" />
-                <Text>Cargando obras...</Text>
-            </View>
-        );
-    }
-    
+  if (loading) {
     return (
-        <SafeAreaView style={styles.container}>
-            <FlatList
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color="#1B365D" />
+        <Text>Cargando obras...</Text>
+      </View>
+    )
+  }
+
+  return (
+    <SafeAreaView style={{flex:1}}>
+        <ScrollView style={styles.container}>
+      <View>
+        {listaObras?.length > 0 ? (
+          <View >
+            {listaObras.map((obra) => (
+              <ObraInfo key={obra.id} obra={obra} eliminar={eliminarObra} />
+            ))}
+          </View>
+        ) : (
+          <View>
+            <Text>
+                No hay Obras
+            </Text>
+          </View>
+        )}
+      </View>
+      </ScrollView>
+      <Pressable
+                style={{
+                    position: "absolute",
+                    bottom: 20,
+                    right: 20,
+                    width: 60,
+                    height: 60,
+                    borderRadius: 30,
+                    borderColor: "#1B365D",
+                    borderWidth: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#f8efd8",
+                    elevation: 5, // Android
+                    shadowOpacity: 0.3, // iOS
+                }}
+                onPress={() => navigation.navigate("AltaObra")}
+            >
+                <Text style={{ color: "#1B365D", fontSize: 30 }}>+</Text>
+            </Pressable>
+
+      {/* <FlatList
                 data={listaObras}
                 keyExtractor={(item) => item.id}
                 contentContainerStyle={styles.listContent}
@@ -69,26 +108,7 @@ export const Listado = () => {
                 )}
                 ListEmptyComponent={<Text style={styles.listEmptyText}>Aún no hay obras disponibles</Text>}
             />
-            <Pressable
-                style={{
-                    position: "absolute",
-                    bottom: 20,
-                    right: 20,
-                    width: 60,
-                    height: 60,
-                    borderRadius: 30,
-                    borderColor: "#1B365D",
-                    borderWidth: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "#f8efd8",
-                    elevation: 5, // Android
-                    shadowOpacity: 0.3, // iOS
-                }}
-                onPress={() => navigation.navigate("AltaObra")}
-            >
-                <Text style={{ color: "#1B365D", fontSize: 30 }}>+</Text>
-            </Pressable>
-        </SafeAreaView>
-    )
+             */}
+    </SafeAreaView>
+  )
 }

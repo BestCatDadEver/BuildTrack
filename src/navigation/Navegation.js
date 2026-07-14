@@ -17,38 +17,38 @@ const Mytabs = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: {
-          borderRadius: 24,
-          marginHorizontal: 12,
-          marginBottom: 10,
+          // borderRadius: 24,
+          // marginHorizontal: 12,
+          // marginBottom: 10,
           borderTopWidth: 0,
           height: 60,
-          backgroundColor: "transparent",
+          backgroundColor: "#40618f",
           elevation: 0,
           paddingBottom: 8,
         },
         headerStyle: {
-          backgroundColor: "#1B365D",
+          backgroundColor: "#40618f",
         },
-        headerTintColor: "#fff",
+        headerTintColor: "#f8efd8",
         headerTitleStyle: {
           fontWeight: "bold",
         },
-        tabBarActiveTintColor: "#ffffff",
+        tabBarActiveTintColor: "#f8efd8",
         tabBarInactiveTintColor: "rgba(255,255,255,0.45)",
         tabBarLabelStyle: {
-          fontSize: 11,
+          fontSize: 12,
           fontWeight: "600",
         },
       }}>
       <Tab.Screen
         name="Contratistas"
         component={AltaContratista}
-        options={{ tabBarLabel: "Agregar Contratistas", tabBarIcon: () => <FontAwesome name="pause" size={24} color="black" /> }}
+        options={{ tabBarLabel: "Agregar Contratistas", tabBarIcon: () => <FontAwesome name="pause" size={24} color="#f8efd8" /> }}
       />
       <Tab.Screen
         name="Listar"
         component={Listado}
-        options={{ tabBarLabel: "Listar", tabBarIcon: () => <FontAwesome name="home" size={24} color="black" /> }}
+        options={{ tabBarLabel: "Listar", tabBarIcon: () => <FontAwesome name="home" size={24} color="#f8efd8" /> }}
       />
     </Tab.Navigator>
   )
@@ -63,7 +63,16 @@ export const Navegation = () => {
     // </SafeAreaProvider>
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            contentStyle: {
+              backgroundColor: "#94A3B8",
+            },
+            headerStyle: {
+              backgroundColor: "#40618f",
+            },
+            headerTintColor: "#f8efd8",
+          }}>
           <Stack.Screen name="Inicio" component={Mytabs} options={{ headerShown: false }} />
 
           <Stack.Screen name="AltaObra" component={AltaObra} options={{ title: "Nueva obra" }} />
