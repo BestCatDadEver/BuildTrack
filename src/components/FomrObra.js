@@ -8,7 +8,7 @@ import { CardFrente } from "./CardFrente"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { eliminarFrente, limpiarFrentes, agregarFrente } from "../redux/frenteSlice"
-import { SelectContratistas } from "./selectContratistas"
+import { SelectContratistas } from "./SelectContratistas"
 import { FormCostos } from "./FormCostos"
 import { getFrentesId, getFrentesPorProyecto } from "../database/frenteObraDb"
 import { store } from "../store/Index"
@@ -26,7 +26,8 @@ export const FomrObra = () => {
   const navegation = useNavigation()
   const [nombreObra, SetnombreObra] = useState("")
   const [fechaInicio, setFechaInicio] = useState(new Date())
-  const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false)
+  const [mostrarInicio, setMostrarInicio] = useState(false)
+  const [mostrarFin, setMostrarFin] = useState(false)
   const [fechaFin, setFechaFin] = useState(new Date())
   const [modalFrente, setModalFrente] = useState(false)
   const [modalContratista, setModalContratista] = useState(false)
@@ -70,7 +71,7 @@ export const FomrObra = () => {
   const cerrarModalCostos = () => {
     setModalCostos(false)
   }
-  const agregarFrente = () => {
+  const agregarFrentes = () => {
     cerrarModal()
   }
 
@@ -103,7 +104,6 @@ export const FomrObra = () => {
     navegation.goBack()
   }
 
-
   // useEffect(() => {
   //   const cargarFrentes = async () => {
   //     const data = await getFrentesId(frentesId)
@@ -128,7 +128,6 @@ export const FomrObra = () => {
     }
   }, [IdContratistas])
 
-
   useEffect(() => {
     const cargarDatosObra = async () => {
       if (accion === "modificar" && obra) {
@@ -137,14 +136,13 @@ export const FomrObra = () => {
         setFechaFin(new Date(obra.fecha_fin_estimada))
         setDescripcion(obra.descripcion)
 
-
         //Se usa Promise.All para esperar que las 3 operaciones se completen.
         const [frentesDb, costosDb, contratistasDb] = await Promise.all([
           getFrentesPorProyecto(obra.id),
           getCostosPorProyecto(obra.id),
           getContratistasPorProyecto(obra.id),
         ])
-
+        console.log('costos mod:',costosDb)
         dispatch(limpiarFrentes())
         frentesDb.forEach((f) => dispatch(agregarFrente(f)))
 
@@ -186,16 +184,16 @@ export const FomrObra = () => {
       <View style={styles.row}>
         <View style={styles.col}>
           <Text style={styles.label}>Fecha Inicio</Text>
-          <Pressable onPress={() => setMostrarSelectorFecha(true)} style={styles.dateButton}>
+          <Pressable onPress={() => setMostrarInicio(true)} style={styles.dateButton}>
             <Text style={styles.dateButtonText}>{fechaInicio.toLocaleDateString()}</Text>
           </Pressable>
-          {mostrarSelectorFecha && (
+          {mostrarInicio && (
             <DateTimePicker
               value={fechaInicio}
               mode="date"
               display="default"
               onChange={(evento, fechaSeleccionada) => {
-                setMostrarSelectorFecha(false)
+                setMostrarInicio(false)
                 if (fechaSeleccionada) {
                   setFechaInicio(fechaSeleccionada)
                 }
@@ -206,16 +204,16 @@ export const FomrObra = () => {
 
         <View style={styles.col}>
           <Text style={styles.label}>Fecha de Fin</Text>
-          <Pressable onPress={() => setMostrarSelectorFecha(true)} style={styles.dateButton}>
+          <Pressable onPress={() => setMostrarFin(true)} style={styles.dateButton}>
             <Text style={styles.dateButtonText}>{fechaFin.toLocaleDateString()}</Text>
           </Pressable>
-          {mostrarSelectorFecha && (
+          {mostrarFin && (
             <DateTimePicker
               value={fechaFin}
               mode="date"
               display="default"
               onChange={(evento, fechaSeleccionada) => {
-                setMostrarSelectorFecha(false)
+                setMostrarFin(false)
                 if (fechaSeleccionada) {
                   setFechaFin(fechaSeleccionada)
                 }
@@ -230,8 +228,8 @@ export const FomrObra = () => {
         <Pressable style={styles.secondaryButton} onPress={abrirModalFrente}>
           <Text style={styles.secondaryButtonText}>+ Agregar frente de obra</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalFrente} backdropColor={'#94A3B8'} style={styles.container}>
-          <FrenteObra cerrarModal={cerrarModalFrente} AgregarFrenteObra={agregarFrente} />
+        <Modal animationType="slide" visible={modalFrente} backdropColor={"#94A3B8"} style={styles.container}>
+          <FrenteObra cerrarModal={cerrarModalFrente} AgregarFrenteObra={agregarFrentes} />
         </Modal>
         {frentes?.length > 0 ? (
           <View>
@@ -249,7 +247,7 @@ export const FomrObra = () => {
         <Pressable style={styles.secondaryButton} onPress={abrirModalContratista}>
           <Text style={styles.secondaryButtonText}>+ Agregar Contratista</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalContratista} backdropColor={'#94A3B8'} style={styles.container}>
+        <Modal animationType="slide" visible={modalContratista} backdropColor={"#94A3B8"} style={styles.container}>
           <SelectContratistas cerrarModal={cerrarModalContratista} />
         </Modal>
         {contratistas?.length > 0 ? (
@@ -267,7 +265,7 @@ export const FomrObra = () => {
         <Pressable style={styles.secondaryButton} onPress={abrirModalCostos}>
           <Text style={styles.secondaryButtonText}>+ Agregar Costos</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalCostos} backdropColor={'#94A3B8'} style={styles.container}>
+        <Modal animationType="slide" visible={modalCostos} backdropColor={"#94A3B8"} style={styles.container}>
           <FormCostos cerrarModal={cerrarModalCostos} />
         </Modal>
         {costos?.length > 0 ? (

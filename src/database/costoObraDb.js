@@ -8,6 +8,7 @@ export const saveCosto = async (nombre, monto) => {
   }
   try {
     const { data, error } = await supabase.from('Costo_Obra').insert([costo]).select().single();
+    console.log("costoGuardado", data)
     return data;
   } catch (e) {
     console.log('ERROR AL INGRESAR FRENTE OBRA ->', e)
@@ -53,10 +54,10 @@ export const getCostosPorProyecto = async (proyectoId) => {
       console.log(error);
       return []
     }
+    console.log("costos desde database", data)
     return data
   } catch (e) {
     console.log(e)
     return []
   }
-  a
 }

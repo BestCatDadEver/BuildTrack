@@ -9,6 +9,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { FlatList } from "react-native"
 import { useFocusEffect } from "@react-navigation/native"
+import { getFrente } from "../database/frenteObraDb"
 
 export const Listado = () => {
   const navigation = useNavigation()
@@ -23,6 +24,11 @@ export const Listado = () => {
     setLoading(false)
   }
 
+//   const obtenerFrentes = async()=>{
+//     const data = await getFrente()
+//     console.log('frentes', data)
+//     //frentes [{"id": "cced757b-01f8-4d8a-bc50-5847de0a72ae", "id_proyecto": "eaf13de6-8199-409e-9c63-2e01a3aa5853", "latitud": "123", "longitud": "123213", "nombre": "Esquina 123"}]
+//   }
   const eliminarObra = async (id) => {
     eliminarProyecto(id)
     obtenerObras()
@@ -32,15 +38,16 @@ export const Listado = () => {
     useCallback(() => {
       setListaObras([])
       obtenerObras()
-      console.log(listaObras)
+    //   obtenerFrentes()
+    //   console.log(listaObras)
     }, []),
   )
 
   if (loading) {
     return (
-      <View style={styles.center}>
+      <View style={[styles.container]}>
         <ActivityIndicator size="large" color="#1B365D" />
-        <Text>Cargando obras...</Text>
+        <Text >Cargando obras...</Text>
       </View>
     )
   }
@@ -84,31 +91,6 @@ export const Listado = () => {
             >
                 <Text style={{ color: "#1B365D", fontSize: 30 }}>+</Text>
             </Pressable>
-
-      {/* <FlatList
-                data={listaObras}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.listContent}
-                renderItem={({ item }) => (
-                    <View style={styles.contratistaCard}>
-                        <View style={styles.contratistaInfo}>
-                            <Text style={styles.contratistaNombre}>{item.nombre}</Text>
-                            <Text style={styles.contratistaDetalle}>Inicio: {item.fechaInicio}</Text>
-                            <Text style={styles.contratistaDetalle}>Fin: {item.fechaFin}</Text>
-                        </View>
-                        <View style={styles.contratistaAcciones}>
-                            <Pressable style={styles.modificarButton} onPress={() => dispatch(setSelectedObra(item))}>
-                                <Text style={styles.modificarButtonText}>Modificar</Text>
-                            </Pressable>
-                            <Pressable style={styles.eliminarButton} onPress={() => handleDelete(item.id)}>
-                                <Text style={styles.eliminarButtonText}>Eliminar</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                )}
-                ListEmptyComponent={<Text style={styles.listEmptyText}>Aún no hay obras disponibles</Text>}
-            />
-             */}
     </SafeAreaView>
   )
 }
