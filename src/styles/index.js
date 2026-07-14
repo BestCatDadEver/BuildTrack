@@ -219,6 +219,16 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 12,
   },
+  containerEmptyState: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  textEmptyState: {
+    color: "rgba(255, 255, 255, 0.60)"
+    ,
+    fontSize: 25
+  }
 })
 
 
