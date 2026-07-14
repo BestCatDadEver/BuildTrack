@@ -205,11 +205,21 @@ const styles = StyleSheet.create({
   margintop:{
     marginTop:8
   },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  detallesContainer: {
+  flexDirection: "row",
+  flexWrap: "wrap",
+},
+
+detalle: {
+  fontSize: 13,
+  color: "#555",
+  marginRight: 12,
+},
+infoContainer: {
+  flex: 1,
+  marginRight: 12,
+},
 })
+
 
 export default styles

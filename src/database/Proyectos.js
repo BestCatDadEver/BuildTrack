@@ -1,18 +1,16 @@
-import { supabase } from "./Index";
+import { supabase } from "./Index"
 
 export const getProyectos = async () => {
-  let resp;
+  let resp
   try {
-    const { data } = await supabase
-      .from('Proyectos')
-      .select('*');
-    resp = data;
+    const { data } = await supabase.from("Proyectos").select("*")
+    resp = data
     console.log(resp)
   } catch (e) {
-    console.log('Error al obtener Proyectos', e)
-    resp = null;
+    console.log("Error al obtener Proyectos", e)
+    resp = null
   } finally {
-    return resp;
+    return resp
   }
 }
 export const saveProyecto = async (nombre, fechaInicio, fechaFin, descripcion, IdContratistas, frentesDeObra, costoObra) => {
@@ -20,11 +18,11 @@ export const saveProyecto = async (nombre, fechaInicio, fechaFin, descripcion, I
     nombre: nombre,
     fecha_inicio: fechaInicio,
     fecha_fin_estimada: fechaFin,
-    descripcion: descripcion
+    descripcion: descripcion,
   }
 
   try {
-    const { data } = await supabase.from("Proyectos").insert([obra]).select("id").single();
+    const { data } = await supabase.from("Proyectos").insert([obra]).select("id").single()
     const proyectoId = data.id
 
     if (IdContratistas?.length > 0) {
@@ -39,16 +37,12 @@ export const saveProyecto = async (nombre, fechaInicio, fechaFin, descripcion, I
       await insertCostoFrentePorProyecto(proyectoId, costoObra)
     }
 
-
-
-    return data;
+    return data
   } catch (e) {
     console.log("Error al ingresar la obra", e)
-    return null;
+    return null
   }
-
 }
-
 
 export const insertContratistaPorProyecto = async (proyectoId, IdContratistas) => {
   console.log(IdContratistas)
@@ -58,10 +52,7 @@ export const insertContratistaPorProyecto = async (proyectoId, IdContratistas) =
   }))
 
   try {
-    const { data, error } = await supabase
-      .from("Proyecto_Contratista")
-      .insert(filas)
-      .select()
+    const { data, error } = await supabase.from("Proyecto_Contratista").insert(filas).select()
 
     if (error) throw error
     return data
@@ -76,19 +67,14 @@ export const insertFrentesDeObraPorProyecto = async (proyectoId, idFrentesDeObra
     id_proyecto: proyectoId,
     latitud: frenteObra.latitud,
     longitud: frenteObra.longitud,
-    nombre: frenteObra.nombre
+    nombre: frenteObra.nombre,
   }))
 
-
   try {
-    const { data, error } = await supabase
-      .from("Frente_Obras")
-      .insert(frenteObra)
-      .select()
+    const { data, error } = await supabase.from("Frente_Obras").insert(frenteObra).select()
 
     if (error) {
       console.log(error)
-
     }
     return data
   } catch (e) {
@@ -101,22 +87,16 @@ export const insertCostoFrentePorProyecto = async (proyectoId, costos) => {
   const costoObra = costos.map((costo) => ({
     proyecto_id: proyectoId,
     tipo_costo: costo.nombre,
-    monto: costo.monto
+    monto: costo.monto,
   }))
 
-
   try {
-    const { data, error } = await supabase
-      .from("Costo_Obra")
-      .insert(costoObra)
-      .select()
+    const { data, error } = await supabase.from("Costo_Obra").insert(costoObra).select()
 
     console.log(costoObra)
 
-
     if (error) {
       console.log(error)
-
     }
     return data
   } catch (e) {
@@ -124,7 +104,6 @@ export const insertCostoFrentePorProyecto = async (proyectoId, costos) => {
     return null
   }
 }
-
 
 export const eliminarProyecto = async (id) => {
   try {
@@ -134,5 +113,22 @@ export const eliminarProyecto = async (id) => {
   } catch (e) {
     console.log("Error al eliminar el proyecto", e)
     return false
+  }
+}
+
+export const calcularCosto = async (id) => {
+  try {
+    const { data, error } = await supabase.from("Costo_Obra").select("monto").eq("id_proyecto", id)
+    if (error) throw error
+    let total = 0
+
+    data.forEach((costo)=>{
+      total += costo.monto
+    })
+
+    return total
+  } catch (e) {
+    console.log("Error al eliminar el proyecto", e)
+    return null
   }
 }

@@ -5,7 +5,7 @@ import { Contratistas } from '../components/Contratistas'
 import styles from '../styles'
 export const AltaContratista = () => {
   return (
-    <SafeAreaView style={{flex:1}}>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
         <FormContratista/>
         {/* <Contratistas/> */}

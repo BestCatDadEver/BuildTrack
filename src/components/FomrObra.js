@@ -8,7 +8,7 @@ import { CardFrente } from "./CardFrente"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { eliminarFrente, limpiarFrentes } from "../redux/frenteSlice"
-import { SelectContratistas } from "./selectContratistas"
+import { SelectContratistas } from "./SelectContratistas"
 import { FormCostos } from "./FormCostos"
 import { getFrentesId } from "../database/frenteObraDb"
 import { store } from "../store/Index"
@@ -18,9 +18,11 @@ import { CardContratista } from "./CardContratista"
 import { getContratistasIds } from "../database/Contratistas"
 import { eliminarContratista, limpiarObra } from "../redux/ObraSlice"
 import { saveProyecto } from "../database/Proyectos"
+import { useNavigation } from "@react-navigation/native"
 
 export const FomrObra = () => {
   const dispatch = useDispatch()
+  const navegation = useNavigation()
   const [nombreObra, SetnombreObra] = useState("")
   const [fechaInicio, setFechaInicio] = useState(new Date())
   const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false)
@@ -74,19 +76,22 @@ export const FomrObra = () => {
     setFechaInicio(new Date())
     SetnombreObra("")
     setContratistas([])
-    dispach(limpiarFrentes())
-    dispach(limpiarCostos())
-    dispach(limpiarObra())
+    dispatch(limpiarFrentes())
+    dispatch(limpiarCostos())
+    dispatch(limpiarObra())
   }
 
+  const cancelarObra = () => {
+    resetForm()
+    navegation.goBack()
+  }
 
   const agregarObra = async () => {
     const data = await saveProyecto(nombreObra, fechaInicio, fechaFin, descripcion, IdContratistas, frentes, costos)
-    dispach(saveProyecto)
+    dispatch(saveProyecto)
     resetForm()
+    navegation.goBack()
   }
-
-
   // useEffect(() => {
   //   const cargarFrentes = async () => {
   //     const data = await getFrentesId(frentesId)
@@ -175,7 +180,7 @@ export const FomrObra = () => {
         <Pressable style={styles.secondaryButton} onPress={abrirModalFrente}>
           <Text style={styles.secondaryButtonText}>+ Agregar frente de obra</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalFrente} style={styles.container}>
+        <Modal animationType="slide" visible={modalFrente} backdropColor={'#94A3B8'} style={styles.container}>
           <FrenteObra cerrarModal={cerrarModalFrente} AgregarFrenteObra={agregarFrente} />
         </Modal>
         {frentes?.length > 0 ? (
@@ -194,15 +199,13 @@ export const FomrObra = () => {
         <Pressable style={styles.secondaryButton} onPress={abrirModalContratista}>
           <Text style={styles.secondaryButtonText}>+ Agregar Contratista</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalContratista} style={styles.container}>
+        <Modal animationType="slide" visible={modalContratista} backdropColor={'#94A3B8'} style={styles.container}>
           <SelectContratistas cerrarModal={cerrarModalContratista} />
         </Modal>
         {contratistas?.length > 0 ? (
           <View>
             {contratistas.map((contratista) => (
-              <CardContratista key={contratista.id} 
-              contratista={contratista} 
-              eliminar={deleteContratista} />
+              <CardContratista key={contratista.id} contratista={contratista} eliminar={deleteContratista} />
             ))}
           </View>
         ) : (
@@ -214,7 +217,7 @@ export const FomrObra = () => {
         <Pressable style={styles.secondaryButton} onPress={abrirModalCostos}>
           <Text style={styles.secondaryButtonText}>+ Agregar Costos</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalCostos} style={styles.container}>
+        <Modal animationType="slide" visible={modalCostos} backdropColor={'#94A3B8'} style={styles.container}>
           <FormCostos cerrarModal={cerrarModalCostos} />
         </Modal>
         {costos?.length > 0 ? (
@@ -228,23 +231,24 @@ export const FomrObra = () => {
         )}
       </View>
 
-        <Text style={styles.subtitle}>Descripción</Text>
+      <Text style={styles.subtitle}>Descripción</Text>
 
-      <View  style={[styles.margintop]}>
-        <TextInput style={styles.inputDescripcion}
+      <View style={[styles.margintop]}>
+        <TextInput
+          style={styles.inputDescripcion}
           placeholderTextColor="#1B365D"
           multiline={true}
           value={descripcion}
           onChangeText={setDescripcion}
-          placeholder="Casa de campo - Los Pinos" />
+          placeholder="Casa de campo - Los Pinos"
+        />
       </View>
 
       <View style={[styles.row, styles.margintop]}>
-        <Pressable style={[styles.eliminarButton]}>
+        <Pressable onPress={cancelarObra} style={[styles.eliminarButton]}>
           <Text>Cancelar Obra</Text>
         </Pressable>
-        <Pressable style={styles.modificarButton}
-        onPress={agregarObra}>
+        <Pressable style={styles.modificarButton} onPress={agregarObra}>
           <Text>Confirmar Obra</Text>
         </Pressable>
       </View>
