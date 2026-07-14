@@ -130,33 +130,41 @@ export const FomrObra = () => {
 
 
   useEffect(() => {
-  const cargarDatosObra = async () => {
-    if (accion === "modificar" && obra) {
-      SetnombreObra(obra.nombre)
-      setFechaInicio(new Date(obra.fecha_inicio))
-      setFechaFin(new Date(obra.fecha_fin_estimada))
-      setDescripcion(obra.descripcion)
+    const cargarDatosObra = async () => {
+      if (accion === "modificar" && obra) {
+        SetnombreObra(obra.nombre)
+        setFechaInicio(new Date(obra.fecha_inicio))
+        setFechaFin(new Date(obra.fecha_fin_estimada))
+        setDescripcion(obra.descripcion)
 
 
-      //Se usa Promise.All para esperar que las 3 operaciones se completen.
-      const [frentesDb, costosDb, contratistasDb] = await Promise.all([
-        getFrentesPorProyecto(obra.id),
-        getCostosPorProyecto(obra.id),
-        getContratistasPorProyecto(obra.id),
-      ])
+        //Se usa Promise.All para esperar que las 3 operaciones se completen.
+        const [frentesDb, costosDb, contratistasDb] = await Promise.all([
+          getFrentesPorProyecto(obra.id),
+          getCostosPorProyecto(obra.id),
+          getContratistasPorProyecto(obra.id),
+        ])
 
-      dispatch(limpiarFrentes())
-      frentesDb.forEach((f) => dispatch(agregarFrente(f)))
+        dispatch(limpiarFrentes())
+        frentesDb.forEach((f) => dispatch(agregarFrente(f)))
 
-      dispatch(limpiarCostos())
-      costosDb.forEach((c) => dispatch(agregarCosto(c)))
+        dispatch(limpiarCostos())
+        costosDb.forEach((c) => dispatch(agregarCosto(c)))
 
-      dispatch(limpiarObra())
-      contratistasDb.forEach((c) => dispatch(agregarContratistaObra(c.id)))
+        dispatch(limpiarObra())
+        contratistasDb.forEach((c) => dispatch(agregarContratistaObra(c.id)))
+      }
     }
-  }
-  cargarDatosObra()
-}, [accion, obra])
+    cargarDatosObra()
+  }, [accion, obra])
+
+  //Para que funcione el reset del form cuando se navega hacia atrás.
+  useEffect(() => {
+    const unsubscribe = navegation.addListener("beforeRemove", () => {
+      resetForm()
+    })
+    return unsubscribe
+  }, [navegation])
 
   return (
     <ScrollView style={styles.container}>
