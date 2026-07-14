@@ -166,9 +166,7 @@ export const FomrObra = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* <View style={styles.header}>
-        <Text style={styles.title}>Agregar Nueva Obra</Text>
-      </View> */}
+
 
       <View>
         <Text style={styles.label}>Nombre de la obra</Text>

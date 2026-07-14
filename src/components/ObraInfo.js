@@ -3,11 +3,12 @@ import { Pressable, Text, View } from "react-native"
 import styles from "../styles"
 import { useNavigation } from "@react-navigation/native"
 
-export const ObraInfo = ({ obra, eliminar, modificar }) => {
+export const ObraInfo = ({ obra, eliminar, modificar , onPress}) => {
 
   const navegation = useNavigation()
 
   return (
+    <Pressable onPress={onPress}>
     <View style={styles.carta}>
       <View style={styles.infoContainer}>
         <Text style={styles.subtitle}>{obra.nombre}</Text>
@@ -25,5 +26,6 @@ export const ObraInfo = ({ obra, eliminar, modificar }) => {
         </Pressable>
       </View>
     </View>
+    </Pressable>
   )
 }
