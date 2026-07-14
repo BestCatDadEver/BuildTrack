@@ -7,25 +7,27 @@ import styles from "../styles"
 import { CardFrente } from "./CardFrente"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import { eliminarFrente, limpiarFrentes } from "../redux/frenteSlice"
+import { eliminarFrente, limpiarFrentes, agregarFrente } from "../redux/frenteSlice"
 import { SelectContratistas } from "./SelectContratistas"
 import { FormCostos } from "./FormCostos"
-import { getFrentesId } from "../database/frenteObraDb"
+import { getFrentesId, getFrentesPorProyecto } from "../database/frenteObraDb"
 import { store } from "../store/Index"
 import { CardCostos } from "./CardCostos"
-import { eliminarCosto, limpiarCostos } from "../redux/CostoSlice"
+import { eliminarCosto, limpiarCostos, agregarCosto } from "../redux/CostoSlice"
 import { CardContratista } from "./CardContratista"
-import { getContratistasIds } from "../database/Contratistas"
-import { eliminarContratista, limpiarObra } from "../redux/ObraSlice"
-import { saveProyecto } from "../database/Proyectos"
-import { useNavigation } from "@react-navigation/native"
+import { getContratistasIds, getContratistasPorProyecto } from "../database/Contratistas"
+import { eliminarContratista, limpiarObra, agregarContratistaObra } from "../redux/ObraSlice"
+import { saveProyecto, editarProyecto } from "../database/Proyectos"
+import { useNavigation, useRoute } from "@react-navigation/native"
+import { getCostosPorProyecto } from "../database/costoObraDb"
 
 export const FomrObra = () => {
   const dispatch = useDispatch()
   const navegation = useNavigation()
   const [nombreObra, SetnombreObra] = useState("")
   const [fechaInicio, setFechaInicio] = useState(new Date())
-  const [mostrarSelectorFecha, setMostrarSelectorFecha] = useState(false)
+  const [mostrarInicio, setMostrarInicio] = useState(false)
+  const [mostrarFin, setMostrarFin] = useState(false)
   const [fechaFin, setFechaFin] = useState(new Date())
   const [modalFrente, setModalFrente] = useState(false)
   const [modalContratista, setModalContratista] = useState(false)
@@ -35,6 +37,9 @@ export const FomrObra = () => {
   const IdContratistas = useSelector((store) => store.Obra.IdContratistas)
   const [contratistas, setContratistas] = useState([])
   const [descripcion, setDescripcion] = useState("")
+
+  const route = useRoute()
+  const { accion, obra } = route.params ?? {}
 
   // const [frentes, setFrentes] = useState([])
 
@@ -66,7 +71,7 @@ export const FomrObra = () => {
   const cerrarModalCostos = () => {
     setModalCostos(false)
   }
-  const agregarFrente = () => {
+  const agregarFrentes = () => {
     cerrarModal()
   }
 
@@ -92,6 +97,13 @@ export const FomrObra = () => {
     resetForm()
     navegation.goBack()
   }
+
+  const modificarObra = async () => {
+    const data = await editarProyecto(obra.id, nombreObra, fechaInicio, fechaFin, descripcion, IdContratistas, frentes, costos)
+    resetForm()
+    navegation.goBack()
+  }
+
   // useEffect(() => {
   //   const cargarFrentes = async () => {
   //     const data = await getFrentesId(frentesId)
@@ -116,6 +128,42 @@ export const FomrObra = () => {
     }
   }, [IdContratistas])
 
+  useEffect(() => {
+    const cargarDatosObra = async () => {
+      if (accion === "modificar" && obra) {
+        SetnombreObra(obra.nombre)
+        setFechaInicio(new Date(obra.fecha_inicio))
+        setFechaFin(new Date(obra.fecha_fin_estimada))
+        setDescripcion(obra.descripcion)
+
+        //Se usa Promise.All para esperar que las 3 operaciones se completen.
+        const [frentesDb, costosDb, contratistasDb] = await Promise.all([
+          getFrentesPorProyecto(obra.id),
+          getCostosPorProyecto(obra.id),
+          getContratistasPorProyecto(obra.id),
+        ])
+        console.log('costos mod:',costosDb)
+        dispatch(limpiarFrentes())
+        frentesDb.forEach((f) => dispatch(agregarFrente(f)))
+
+        dispatch(limpiarCostos())
+        costosDb.forEach((c) => dispatch(agregarCosto(c)))
+
+        dispatch(limpiarObra())
+        contratistasDb.forEach((c) => dispatch(agregarContratistaObra(c.id)))
+      }
+    }
+    cargarDatosObra()
+  }, [accion, obra])
+
+  //Para que funcione el reset del form cuando se navega hacia atrás.
+  useEffect(() => {
+    const unsubscribe = navegation.addListener("beforeRemove", () => {
+      resetForm()
+    })
+    return unsubscribe
+  }, [navegation])
+
   return (
     <ScrollView style={styles.container}>
       {/* <View style={styles.header}>
@@ -136,16 +184,16 @@ export const FomrObra = () => {
       <View style={styles.row}>
         <View style={styles.col}>
           <Text style={styles.label}>Fecha Inicio</Text>
-          <Pressable onPress={() => setMostrarSelectorFecha(true)} style={styles.dateButton}>
+          <Pressable onPress={() => setMostrarInicio(true)} style={styles.dateButton}>
             <Text style={styles.dateButtonText}>{fechaInicio.toLocaleDateString()}</Text>
           </Pressable>
-          {mostrarSelectorFecha && (
+          {mostrarInicio && (
             <DateTimePicker
               value={fechaInicio}
               mode="date"
               display="default"
               onChange={(evento, fechaSeleccionada) => {
-                setMostrarSelectorFecha(false)
+                setMostrarInicio(false)
                 if (fechaSeleccionada) {
                   setFechaInicio(fechaSeleccionada)
                 }
@@ -156,16 +204,16 @@ export const FomrObra = () => {
 
         <View style={styles.col}>
           <Text style={styles.label}>Fecha de Fin</Text>
-          <Pressable onPress={() => setMostrarSelectorFecha(true)} style={styles.dateButton}>
+          <Pressable onPress={() => setMostrarFin(true)} style={styles.dateButton}>
             <Text style={styles.dateButtonText}>{fechaFin.toLocaleDateString()}</Text>
           </Pressable>
-          {mostrarSelectorFecha && (
+          {mostrarFin && (
             <DateTimePicker
               value={fechaFin}
               mode="date"
               display="default"
               onChange={(evento, fechaSeleccionada) => {
-                setMostrarSelectorFecha(false)
+                setMostrarFin(false)
                 if (fechaSeleccionada) {
                   setFechaFin(fechaSeleccionada)
                 }
@@ -180,8 +228,8 @@ export const FomrObra = () => {
         <Pressable style={styles.secondaryButton} onPress={abrirModalFrente}>
           <Text style={styles.secondaryButtonText}>+ Agregar frente de obra</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalFrente} backdropColor={'#94A3B8'} style={styles.container}>
-          <FrenteObra cerrarModal={cerrarModalFrente} AgregarFrenteObra={agregarFrente} />
+        <Modal animationType="slide" visible={modalFrente} backdropColor={"#94A3B8"} style={styles.container}>
+          <FrenteObra cerrarModal={cerrarModalFrente} AgregarFrenteObra={agregarFrentes} />
         </Modal>
         {frentes?.length > 0 ? (
           <View>
@@ -199,7 +247,7 @@ export const FomrObra = () => {
         <Pressable style={styles.secondaryButton} onPress={abrirModalContratista}>
           <Text style={styles.secondaryButtonText}>+ Agregar Contratista</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalContratista} backdropColor={'#94A3B8'} style={styles.container}>
+        <Modal animationType="slide" visible={modalContratista} backdropColor={"#94A3B8"} style={styles.container}>
           <SelectContratistas cerrarModal={cerrarModalContratista} />
         </Modal>
         {contratistas?.length > 0 ? (
@@ -217,7 +265,7 @@ export const FomrObra = () => {
         <Pressable style={styles.secondaryButton} onPress={abrirModalCostos}>
           <Text style={styles.secondaryButtonText}>+ Agregar Costos</Text>
         </Pressable>
-        <Modal animationType="slide" visible={modalCostos} backdropColor={'#94A3B8'} style={styles.container}>
+        <Modal animationType="slide" visible={modalCostos} backdropColor={"#94A3B8"} style={styles.container}>
           <FormCostos cerrarModal={cerrarModalCostos} />
         </Modal>
         {costos?.length > 0 ? (
@@ -248,8 +296,8 @@ export const FomrObra = () => {
         <Pressable onPress={cancelarObra} style={[styles.eliminarButton]}>
           <Text>Cancelar Obra</Text>
         </Pressable>
-        <Pressable style={styles.modificarButton} onPress={agregarObra}>
-          <Text>Confirmar Obra</Text>
+        <Pressable style={styles.modificarButton} onPress={accion === "modificar" ? modificarObra : agregarObra}>
+          <Text>{accion === "modificar" ? "Modificar Obra" : "Confirmar Obra"}</Text>
         </Pressable>
       </View>
     </ScrollView>

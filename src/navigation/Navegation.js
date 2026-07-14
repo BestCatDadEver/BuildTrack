@@ -75,7 +75,7 @@ export const Navegation = () => {
           }}>
           <Stack.Screen name="Inicio" component={Mytabs} options={{ headerShown: false }} />
 
-          <Stack.Screen name="AltaObra" component={AltaObra} options={{ title: "Nueva obra" }} />
+          <Stack.Screen name="AltaObra" component={AltaObra} options={{ title: "Gestion De Obra" }} />
 
           {/* <Stack.Screen
             name="DetalleObra"

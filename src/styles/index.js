@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
   },
-   inputDescripcion: {
+  inputDescripcion: {
     backgroundColor: "#f8efd8",
     borderWidth: 1,
     borderColor: "#1B365D",
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   modificarButton: {
-    backgroundColor: "#f4d7a4",
+    backgroundColor: "#f7daa9",
     borderWidth: 1,
     borderColor: "#1B365D",
     borderRadius: 6,
@@ -202,23 +202,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 10,
   },
-  margintop:{
-    marginTop:8
+  margintop: {
+    marginTop: 8
   },
   detallesContainer: {
-  flexDirection: "row",
-  flexWrap: "wrap",
-},
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
 
-detalle: {
-  fontSize: 13,
-  color: "#555",
-  marginRight: 12,
-},
-infoContainer: {
-  flex: 1,
-  marginRight: 12,
-},
+  detalle: {
+    fontSize: 13,
+    color: "#555",
+    marginRight: 12,
+  },
+  infoContainer: {
+    flex: 1,
+    marginRight: 12,
+  },
 })
 
 
