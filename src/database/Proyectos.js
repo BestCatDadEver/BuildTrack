@@ -118,17 +118,18 @@ export const eliminarProyecto = async (id) => {
 
 export const calcularCosto = async (id) => {
   try {
-    const { data, error } = await supabase.from("Costo_Obra").select("monto").eq("id_proyecto", id)
+    const { data, error } = await supabase.from("Costo_Obra").select("monto").eq("proyecto_id", id)
     if (error) throw error
     let total = 0
+    
 
     data.forEach((costo) => {
       total += costo.monto
     })
-
+    console.log( 'costo total',  total)
     return total
   } catch (e) {
-    console.log("Error al eliminar el proyecto", e)
+    console.log("Error al calcular el costo total", e)
     return null
   }
 }
