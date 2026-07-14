@@ -22,7 +22,7 @@ export const FormCostos = ({ cerrarModal }) => {
 
   const guardar = () => {
     dispach(agregarCosto({tipo_costo,monto}));
-    setNombre("")
+    setTipoCosto("")
     setMonto("")
     cerrarModal()
   }
