@@ -78,8 +78,8 @@ export const Listado = () => {
               ))}
             </View>
           ) : (
-            <View>
-              <Text>No hay Obras</Text>
+            <View style={styles.containerEmptyState}>
+              <Text style={styles.textEmptyState}>No hay obras</Text>
             </View>
           )}
         </View>

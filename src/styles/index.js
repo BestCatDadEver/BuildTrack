@@ -171,20 +171,20 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   modificarButton: {
-    backgroundColor: "#f7daa9",
+    backgroundColor: "transparent",
     borderWidth: 1,
-    borderColor: "#1B365D",
+    borderColor: "#D4A017",
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
   },
   modificarButtonText: {
-    color: "#1B365D",
+    color: "#8B1E1E",
     fontSize: 13,
     fontWeight: "600",
   },
   eliminarButton: {
-    backgroundColor: "#f8d7da",
+    backgroundColor: "transparent",
     borderWidth: 1,
     borderColor: "#8B1E1E",
     borderRadius: 6,
@@ -194,6 +194,34 @@ const styles = StyleSheet.create({
   eliminarButtonText: {
     color: "#8B1E1E",
     fontSize: 13,
+    fontWeight: "600",
+  },
+  cancelarObraButton: {
+    backgroundColor: "#f8d7da",
+    borderWidth: 1,
+    borderColor: "#8B1E1E",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: "center",
+  },
+  cancelarObraButtonText: {
+    color: "#8B1E1E",
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  confirmarObraButton: {
+    backgroundColor: "#f4d7a4",
+    borderWidth: 1,
+    borderColor: "#1B365D",
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: "center",
+  },
+  confirmarObraButtonText: {
+    color: "#1B365D",
+    fontSize: 15,
     fontWeight: "600",
   },
   listEmptyText: {
@@ -219,6 +247,21 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 12,
   },
+  containerEmptyState: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  textEmptyState: {
+    color: "rgba(255, 255, 255, 0.60)",
+    fontSize: 25
+  },
+  center: {
+    justifyContent: "center", 
+    alignItems: "center" ,
+        flex: 1,
+
+  }
 })
 
 
