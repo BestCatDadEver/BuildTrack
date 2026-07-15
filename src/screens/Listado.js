@@ -60,9 +60,9 @@ export const Listado = () => {
 
   if (loading) {
     return (
-      <View style={[styles.container]}>
-        <ActivityIndicator size="large" color="#1B365D" />
-        <Text>Cargando obras...</Text>
+      <View style={[styles.containerCargando]}>
+        <ActivityIndicator size="large" color="#f4d7a4" />
+        <Text style={styles.textEmptyState}>Cargando obras...</Text>
       </View>
     )
   }
@@ -85,21 +85,7 @@ export const Listado = () => {
         </View>
       </ScrollView>
       <Pressable
-        style={{
-          position: "absolute",
-          bottom: 20,
-          right: 20,
-          width: 60,
-          height: 60,
-          borderRadius: 30,
-          borderColor: "#1B365D",
-          borderWidth: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#f8efd8",
-          elevation: 5, // Android
-          shadowOpacity: 0.3, // iOS
-        }}
+        style={styles.bottonFlotante}
         onPress={() => navigation.navigate("AltaObra")}>
         <Text style={{ color: "#1B365D", fontSize: 30 }}>+</Text>
       </Pressable>

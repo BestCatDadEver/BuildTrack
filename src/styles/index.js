@@ -171,9 +171,9 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   modificarButton: {
-    backgroundColor: "transparent",
+    backgroundColor: "#f4d7a4",
     borderWidth: 1,
-    borderColor: "#D4A017",
+    borderColor: "#8B1E1E",
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
@@ -184,29 +184,29 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   eliminarButton: {
-    backgroundColor: "transparent",
+    backgroundColor: "#8b1e1ea8",
     borderWidth: 1,
-    borderColor: "#8B1E1E",
+    borderColor: "#f4d7a4",
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
   },
   eliminarButtonText: {
-    color: "#8B1E1E",
+    color: "#f4d7a4",
     fontSize: 13,
     fontWeight: "600",
   },
   cancelarObraButton: {
-    backgroundColor: "#f8d7da",
+    backgroundColor: "#8b1e1ea8",
     borderWidth: 1,
-    borderColor: "#8B1E1E",
+    borderColor: "#8b1e1ea8",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 20,
     alignItems: "center",
   },
   cancelarObraButtonText: {
-    color: "#8B1E1E",
+    color: "#f4d7a4",
     fontSize: 15,
     fontWeight: "600",
   },
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   margintop: {
-    marginTop: 8
+    marginTop: 8,
   },
   detallesContainer: {
     flexDirection: "row",
@@ -250,19 +250,38 @@ const styles = StyleSheet.create({
   containerEmptyState: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+  },
+  containerCargando: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#94A3B8",
   },
   textEmptyState: {
     color: "rgba(255, 255, 255, 0.60)",
-    fontSize: 25
+    fontSize: 25,
   },
   center: {
-    justifyContent: "center", 
-    alignItems: "center" ,
-        flex: 1,
-
-  }
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
+  bottonFlotante: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderColor: "#1B365D",
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f8efd8",
+    elevation: 5, // Android
+    shadowOpacity: 0.3, // iOS
+  },
 })
-
 
 export default styles

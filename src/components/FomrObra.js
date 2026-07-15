@@ -40,6 +40,8 @@ export const FomrObra = () => {
 
   const route = useRoute()
   const { accion, obra } = route.params ?? {}
+//le mandamos la accion editar desde el listado para reutilizar el form
+
 
   // const [frentes, setFrentes] = useState([])
 
@@ -93,7 +95,6 @@ export const FomrObra = () => {
 
   const agregarObra = async () => {
     const data = await saveProyecto(nombreObra, fechaInicio, fechaFin, descripcion, IdContratistas, frentes, costos)
-    dispatch(saveProyecto)
     resetForm()
     navegation.goBack()
   }
