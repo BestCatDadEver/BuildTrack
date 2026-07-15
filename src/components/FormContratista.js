@@ -14,7 +14,7 @@ export const FormContratista = () => {
 
   const dispatch = useDispatch();
   const selectedContratista = useSelector(state => state.contratistas.selectedContratista);
-  const isEditing = !!selectedContratista
+  const estasEditando = !!selectedContratista
 
   useEffect(() => {
     if (selectedContratista) {
@@ -94,7 +94,7 @@ export const FormContratista = () => {
       </View>
 
       <View>
-        {isEditing ? (
+        {estasEditando ? (
           <View>
             <Pressable style={styles.secondaryButton} onPress={updateContratistaClick}>
               <Text style={styles.secondaryButtonText}>Aceptar</Text>
